@@ -5,6 +5,11 @@ public class Test {
 		System.out.println("동완햄 뭐함");
 		System.out.println("아아아아");
 		System.out.println("아아아아");
+		System.out.println("진성이바보");
+		System.out.println("진성이바보");
+		System.out.println("진성이바보");
+		System.out.println("진성이바보");
+		System.out.println("진성이바보");
 	}
 
 }
