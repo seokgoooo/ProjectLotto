@@ -1,5 +1,5 @@
 
 public class Test {
-	//잉 기매링
+	public static void main
 
 }
