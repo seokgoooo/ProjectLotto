@@ -2,8 +2,8 @@
 public class Test {
 	public static void main(String[] args) {
 		System.out.println("완성시킴"); // 컷!
-
-		//맘에안든다
+		System.out.println("싫다 계속할끄다");
+		//맘에 들때까지 
 
 
 	}
