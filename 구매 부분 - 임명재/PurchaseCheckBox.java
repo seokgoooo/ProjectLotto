@@ -63,9 +63,9 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 					set.removeAll(set);
 				}
 				System.out.println(list); // list에 set이 담기지않음 
-				PurchaseConfirm dialog = new PurchaseConfirm(PurchaseCheckBox.this); 
-				dialog.setVisible(true);
-				dialog.setList(list);
+//				PurchaseConfirm dialog = new PurchaseConfirm(PurchaseCheckBox.this); 
+//				dialog.setVisible(true);
+//				dialog.setList(list);
 
 			}
 		});
