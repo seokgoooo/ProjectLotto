@@ -19,7 +19,7 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 	private String s;
 
 	public PurchaseCheckBox() {
-		
+
 		List<Set<Integer>> list = new ArrayList<>();
 		JPanel pnlAll = new JPanel();
 		JPanel pnl = new JPanel();
@@ -62,7 +62,7 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 					}
 					set.removeAll(set);
 				}
-				System.out.println(list); // list에 set이 담기지않음 
+				System.out.println(list); // list에 set이 담기지않음
 //				PurchaseConfirm dialog = new PurchaseConfirm(PurchaseCheckBox.this); 
 //				dialog.setVisible(true);
 //				dialog.setList(list);
@@ -78,23 +78,21 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-	public static void main(String[] args) {
-		new PurchaseCheckBox().setVisible(true);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		for (int i = 0; i < cbs.length; i++) {
 			if (e.getSource() == cbs[i]) {
 				if (cbs[i].isSelected()) {
 					set.add(i + 1);
 				} else {
-					set.remove(i + 1);					
+					set.remove(i + 1);
 				}
 			}
 
 		}
+	}
 
+	public static void main(String[] args) {
+		new PurchaseCheckBox().setVisible(true);
 	}
 }
