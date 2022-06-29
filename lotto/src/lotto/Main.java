@@ -1,4 +1,5 @@
 package lotto;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 
@@ -28,7 +29,7 @@ public class Main extends JFrame{
 		mainPnl.add(btnBuy);
 		
 		JButton btnNum = new JButton();
-		btnNum.setBounds(246, 416, 250, 145);
+		btnNum.setBounds(250, 416, 250, 145);
 		ImageIcon icon2 = new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼-02.png");
 		Image img2 = icon2.getImage();
 		Image changeImg2 = img2.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
@@ -37,7 +38,7 @@ public class Main extends JFrame{
 		mainPnl.add(btnNum);
 		
 		JButton btnWin = new JButton();
-		btnWin.setBounds(496, 415, 250, 146);
+		btnWin.setBounds(500, 416, 250, 146);
 		ImageIcon icon3 = new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼-03.png");
 		Image img3 = icon3.getImage();
 		Image changeImg3 = img3.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
@@ -54,15 +55,17 @@ public class Main extends JFrame{
 		btnCheck.setIcon(changeIcon4);
 		mainPnl.add(btnCheck);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 984, 67);
-		mainPnl.add(panel);
-		panel.setLayout(null);
+		JPanel titlePanel = new JPanel();
+		titlePanel.setBounds(0, 0, 984, 67);
+		mainPnl.add(titlePanel);
+		titlePanel.setLayout(null);
+		titlePanel.setBackground(Color.white);
 		
-		JLabel mainTitle = new JLabel("메인 타이틀");
+		JLabel mainTitle = new JLabel("퇴사를 꿈꾸며 Let's Lotto!");
 		mainTitle.setBounds(292, 16, 424, 34);
-		panel.add(mainTitle);
+		titlePanel.add(mainTitle);
 		mainTitle.setFont(new Font("HY헤드라인M", Font.BOLD, 30));
+		
 		mainTitle.setHorizontalAlignment(JLabel.CENTER); //JLabel 가운데 정렬
 		
 		
