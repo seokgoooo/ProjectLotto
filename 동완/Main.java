@@ -1,10 +1,5 @@
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -12,102 +7,83 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class MainFrame extends JFrame {
-	public MainFrame() {
+public class Main extends JFrame{
+	public Main() {
 		super("로또 추첨");
-		Toolkit kit = Toolkit.getDefaultToolkit();
+		JPanel mainPnl = new JPanel();
+
+
+		getContentPane().add(mainPnl);
+
+		JButton btnBuy = new JButton();
+		btnBuy.setBounds(0, 416, 250, 145);
+		//btnBuy.setVerticalTextPosition(SwingConstants.BOTTOM);
+		ImageIcon icon = new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼-01.png");
+		Image img = icon.getImage();
+		Image changeImg = img.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
+		ImageIcon changeIcon = new ImageIcon(changeImg);
+		mainPnl.setLayout(null);
+		btnBuy.setIcon(changeIcon);
+		mainPnl.add(btnBuy);
+
+		JButton btnNum = new JButton();
+		btnNum.setBounds(246, 416, 250, 145);
+		ImageIcon icon2 = new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼-02.png");
+		Image img2 = icon2.getImage();
+		Image changeImg2 = img2.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
+		ImageIcon changeIcon2 = new ImageIcon(changeImg2);
+		btnNum.setIcon(changeIcon2);
+		mainPnl.add(btnNum);
+
+		JButton btnWin = new JButton();
+		btnWin.setBounds(496, 415, 250, 146);
+		ImageIcon icon3 = new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼-03.png");
+		Image img3 = icon3.getImage();
+		Image changeImg3 = img3.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
+		ImageIcon changeIcon3 = new ImageIcon(changeImg3);
+		btnWin.setIcon(changeIcon3);
+		mainPnl.add(btnWin);
+
+		JButton btnCheck = new JButton();
+		btnCheck.setBounds(734, 416, 250, 145);
+		ImageIcon icon4 = new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼-04.png");
+		Image img4 = icon4.getImage();
+		Image changeImg4 = img4.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
+		ImageIcon changeIcon4 = new ImageIcon(changeImg4);
+		btnCheck.setIcon(changeIcon4);
+		mainPnl.add(btnCheck);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 984, 67);
+		mainPnl.add(panel);
+		panel.setLayout(null);
+
+		JLabel mainTitle = new JLabel("메인 타이틀");
+		mainTitle.setBounds(292, 16, 424, 34);
+		panel.add(mainTitle);
+		mainTitle.setFont(new Font("HY헤드라인M", Font.BOLD, 30));
+		mainTitle.setHorizontalAlignment(JLabel.CENTER); //JLabel 가운데 정렬
+
+
+
+		JPanel imagePnl = new JPanel();
+		imagePnl.setBounds(0, 65, 984, 352);
+		mainPnl.add(imagePnl);
+		imagePnl.setLayout(null);
+
+		JLabel lblNewLabel = new JLabel();
+		lblNewLabel.setBounds(0, 0, 984, 352);
+		imagePnl.add(lblNewLabel);
+		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\메인.jpg"));
+
+
+
 		setSize(1000, 600);
-		setLocationRelativeTo(null);
 
-		JPanel mainWrapPanel = new JPanel();
-		mainWrapPanel.setLayout(null);
-		getContentPane().add(mainWrapPanel);
 
-		// 메인 화면 타이틀 문구
-		JPanel mainTitlePanel = new JPanel();
-		mainTitlePanel.setBounds(0, 0, 984, 67);
-		mainTitlePanel.setLayout(null);
-		mainTitlePanel.setBackground(Color.WHITE);
-		mainWrapPanel.add(mainTitlePanel);
-
-		JLabel mainTitleText = new JLabel("퇴사를 꿈꾸며 Let's Lotto!");
-		mainTitleText.setBounds(292, 16, 424, 34);
-		mainTitleText.setFont(new Font("HY헤드라인M", Font.BOLD, 30));
-		mainTitleText.setHorizontalAlignment(JLabel.CENTER); // JLabel 가운데 정렬
-		mainTitlePanel.add(mainTitleText);
-		//
-
-		// 메인 화면 이미지 GUI 구현
-		JPanel mainImagePanel = new JPanel();
-		mainImagePanel.setBounds(0, 65, 984, 352);
-		mainWrapPanel.add(mainImagePanel);
-		mainImagePanel.setLayout(null);
-
-		JLabel mainImageLabel = new JLabel();
-		mainImageLabel.setBounds(0, 0, 984, 352);
-		mainImagePanel.add(mainImageLabel);
-		URL mainImageUrl = MainFrame.class.getClassLoader().getResource("main_01.png");
-		ImageIcon mainImageIcon = new ImageIcon(kit.getImage(mainImageUrl));
-		Image mainImage = mainImageIcon.getImage();
-		Image changeMainImage = mainImage.getScaledInstance(1000, 350, Image.SCALE_SMOOTH);
-		ImageIcon changeMainIcon = new ImageIcon(changeMainImage);
-		mainImageLabel.setIcon(changeMainIcon);
-		//
-
-		// 메인 화면 구매하기 버튼 구현
-		JButton mainBuyButton = new JButton();
-		mainBuyButton.setBounds(0, 416, 250, 145);
-		URL mainBuyUrl = MainFrame.class.getClassLoader().getResource("mainButton_01.png");
-		ImageIcon mainBuyIcon = new ImageIcon(kit.getImage(mainBuyUrl));
-		Image mainBuyImage = mainBuyIcon.getImage();
-		Image changeMainBuyImage = mainBuyImage.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
-		ImageIcon changeMainBuyIcon = new ImageIcon(changeMainBuyImage);
-		mainBuyButton.setIcon(changeMainBuyIcon);
-		mainWrapPanel.add(mainBuyButton);
-
-		// 메인 화면 번호추첨 버튼 구현
-		JButton mainNumberLotteryButton = new JButton();
-		mainNumberLotteryButton.setBounds(250, 416, 250, 145);
-		URL mainNumberLotteryUrl = MainFrame.class.getClassLoader().getResource("mainButton_02.png");
-		ImageIcon mainNumberLotteryIcon = new ImageIcon(kit.getImage(mainNumberLotteryUrl));
-		Image mainNumberLotteryImage = mainNumberLotteryIcon.getImage();
-		Image changeMainNumberLotteryImage = mainNumberLotteryImage.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
-		ImageIcon changeMainNumberLotteryIcon = new ImageIcon(changeMainNumberLotteryImage);
-		mainNumberLotteryButton.setIcon(changeMainNumberLotteryIcon);
-		mainWrapPanel.add(mainNumberLotteryButton);
-
-		// 메인 화면 역대당첨번호 버튼 구현
-		JButton mainWinnerHistoryButton = new JButton();
-		mainWinnerHistoryButton.setBounds(500, 416, 250, 146);
-		URL mainWinnerHistoryUrl = MainFrame.class.getClassLoader().getResource("mainButton_03.png");
-		ImageIcon mainWinnerHistoryIcon = new ImageIcon(kit.getImage(mainWinnerHistoryUrl));
-		Image mainWinnerHistoryImage = mainWinnerHistoryIcon.getImage();
-		Image changeMainWinnerHistoryImage = mainWinnerHistoryImage.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
-		ImageIcon changeMainWinnerHistoryIcon = new ImageIcon(changeMainWinnerHistoryImage);
-		mainWinnerHistoryButton.setIcon(changeMainWinnerHistoryIcon);
-		mainWrapPanel.add(mainWinnerHistoryButton);
-
-		// 메인 화면 당첨확인 버튼 구현
-		JButton mainCheckWinButton = new JButton();
-		mainCheckWinButton.setBounds(734, 416, 250, 145);
-		URL mainCheckWinUrl = MainFrame.class.getClassLoader().getResource("mainButton_04.png");
-		ImageIcon mainCheckWinIcon = new ImageIcon(kit.getImage(mainCheckWinUrl));
-		Image mainCheckWinImage = mainCheckWinIcon.getImage();
-		Image changeMainCheckWinImage = mainCheckWinImage.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
-		ImageIcon changeMainCheckWinIcon = new ImageIcon(changeMainCheckWinImage);
-		mainCheckWinButton.setIcon(changeMainCheckWinIcon);
-		mainWrapPanel.add(mainCheckWinButton);
-
-		mainBuyButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-//				ToDo : 구매하기 버튼을 누르면 구매하기 창으로 이동
-//				new BuyFrame().setVisible(true);
-			}
-		});
 	}
 
 	public static void main(String[] args) {
-		new MainFrame().setVisible(true);
+		new Main().setVisible(true);
 	}
 }
