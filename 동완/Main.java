@@ -7,17 +7,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Main extends JFrame{
+public class Main extends JFrame {
 	public Main() {
 		super("로또 추첨");
 		JPanel mainPnl = new JPanel();
-
 
 		getContentPane().add(mainPnl);
 
 		JButton btnBuy = new JButton();
 		btnBuy.setBounds(0, 416, 250, 145);
-		//btnBuy.setVerticalTextPosition(SwingConstants.BOTTOM);
+		// btnBuy.setVerticalTextPosition(SwingConstants.BOTTOM);
 		ImageIcon icon = new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼-01.png");
 		Image img = icon.getImage();
 		Image changeImg = img.getScaledInstance(250, 145, Image.SCALE_SMOOTH);
@@ -62,9 +61,7 @@ public class Main extends JFrame{
 		mainTitle.setBounds(292, 16, 424, 34);
 		panel.add(mainTitle);
 		mainTitle.setFont(new Font("HY헤드라인M", Font.BOLD, 30));
-		mainTitle.setHorizontalAlignment(JLabel.CENTER); //JLabel 가운데 정렬
-
-
+		mainTitle.setHorizontalAlignment(JLabel.CENTER); // JLabel 가운데 정렬
 
 		JPanel imagePnl = new JPanel();
 		imagePnl.setBounds(0, 65, 984, 352);
@@ -76,10 +73,7 @@ public class Main extends JFrame{
 		imagePnl.add(lblNewLabel);
 		lblNewLabel.setIcon(new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\메인.jpg"));
 
-
-
 		setSize(1000, 600);
-
 
 	}
 
