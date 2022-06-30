@@ -1,12 +1,10 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +19,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	public MainFrame() {
 		super("로또 추첨");
+		Toolkit kit = Toolkit.getDefaultToolkit();
+
 		setSize(1000, 600);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -51,15 +51,10 @@ public class MainFrame extends JFrame implements ActionListener {
 		mainImagePanel.setLayout(null);
 		wrapPanel.add(mainImagePanel);
 
-		try {
-			File file = new File("resources/main_01.png");
-			BufferedImage img = ImageIO.read(file);
-			JLabel mainImageLabel = new JLabel(new ImageIcon(img));
-			mainImageLabel.setBounds(0, 0, 984, 352);
-			mainImagePanel.add(mainImageLabel);
-		} catch (IOException e) {
-
-		}
+		URL url = MainFrame.class.getClassLoader().getResource("main_01.png");
+		JLabel mainImageLabel = new JLabel(new ImageIcon(kit.getImage(url)));
+		mainImageLabel.setBounds(0, 0, 984, 352);
+		mainImagePanel.add(mainImageLabel);
 
 		// 화면이 나오는 속도 저하 이슈
 //		1. getScaledInstance 메소드로 image 해상도를 줄이는 작업이 시간소요가 많이 되어 이 작업을 없애고
@@ -74,44 +69,32 @@ public class MainFrame extends JFrame implements ActionListener {
 		//
 
 		// 메인 화면 구매하기 버튼 구현
-		try {
-			mainBuyButton = new JButton();
-			mainBuyButton.setBounds(0, 416, 250, 145);
-			BufferedImage img = ImageIO.read(new File("resources/mainButton_01.png"));
-			mainBuyButton.setIcon(new ImageIcon(img));
-			wrapPanel.add(mainBuyButton);
-		} catch (IOException e) {
-		}
+		mainBuyButton = new JButton();
+		mainBuyButton.setBounds(0, 416, 250, 145);
+		URL url1 = MainFrame.class.getClassLoader().getResource("mainButton_01.png");
+		mainBuyButton.setIcon(new ImageIcon(kit.getImage(url1)));
+		wrapPanel.add(mainBuyButton);
 
 		// 메인 화면 번호추첨 버튼 구현
-		try {
-			mainNumberLotteryButton = new JButton();
-			mainNumberLotteryButton.setBounds(250, 416, 250, 145);
-			BufferedImage img = ImageIO.read(new File("resources/mainButton_02.png"));
-			mainNumberLotteryButton.setIcon(new ImageIcon(img));
-			wrapPanel.add(mainNumberLotteryButton);
-		} catch (IOException e) {
-		}
+		mainNumberLotteryButton = new JButton();
+		mainNumberLotteryButton.setBounds(250, 416, 250, 145);
+		URL url2 = MainFrame.class.getClassLoader().getResource("mainButton_02.png");
+		mainNumberLotteryButton.setIcon(new ImageIcon(kit.getImage(url2)));
+		wrapPanel.add(mainNumberLotteryButton);
 
 		// 메인 화면 역대당첨번호 버튼 구현
-		try {
-			mainWinnerHistoryButton = new JButton();
-			mainWinnerHistoryButton.setBounds(500, 416, 250, 146);
-			BufferedImage img = ImageIO.read(new File("resources/mainButton_03.png"));
-			mainWinnerHistoryButton.setIcon(new ImageIcon(img));
-			wrapPanel.add(mainWinnerHistoryButton);
-		} catch (IOException e) {
-		}
+		mainWinnerHistoryButton = new JButton();
+		mainWinnerHistoryButton.setBounds(500, 416, 250, 146);
+		URL url3 = MainFrame.class.getClassLoader().getResource("mainButton_03.png");
+		mainWinnerHistoryButton.setIcon(new ImageIcon(kit.getImage(url3)));
+		wrapPanel.add(mainWinnerHistoryButton);
 
 		// 메인 화면 당첨확인 버튼 구현
-		try {
-			mainCheckWinButton = new JButton();
-			mainCheckWinButton.setBounds(734, 416, 250, 145);
-			BufferedImage img = ImageIO.read(new File("resources/mainButton_04.png"));
-			mainCheckWinButton.setIcon(new ImageIcon(img));
-			wrapPanel.add(mainCheckWinButton);
-		} catch (IOException e) {
-		}
+		mainCheckWinButton = new JButton();
+		mainCheckWinButton.setBounds(734, 416, 250, 145);
+		URL url4 = MainFrame.class.getClassLoader().getResource("mainButton_04.png");
+		mainCheckWinButton.setIcon(new ImageIcon(kit.getImage(url4)));
+		wrapPanel.add(mainCheckWinButton);
 
 		mainBuyButton.addActionListener(this);
 		mainNumberLotteryButton.addActionListener(this);
