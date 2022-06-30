@@ -19,18 +19,10 @@ import javax.swing.JPanel;
 public class PurchaseCheckBox extends JFrame implements ActionListener {
 	private JCheckBox[] cbs;
 	private Set<Integer> set = new HashSet<>();
-
+ 
 	public PurchaseCheckBox() {
-<<<<<<< HEAD
-
-		List<Set<Integer>> list = new ArrayList<>();
-		JPanel pnlAll = new JPanel();
-		JPanel pnl = new JPanel();
-		JPanel bPnl = new JPanel();
-=======
 		super("구매");
 		List<List<Integer>> lottoList = new ArrayList<>();
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectLotto.git
 
 		JPanel allPnl = new JPanel();
 
@@ -136,23 +128,8 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 				if (lottoList.size() == 5) { // 5장 넘게 구매X
 					JOptionPane.showMessageDialog(purchasePnl, "복권은 한번에 5장까지 구매 가능합니다.");
 				} else {
-<<<<<<< HEAD
-					s = "수동";
-					list.add(set);
-					System.out.println(set);
-					for (int i = 0; i < cbs.length; i++) {
-						cbs[i].setSelected(false);
-					}
-					set.removeAll(set);
-				}
-				System.out.println(list); // list에 set이 담기지않음
-//				PurchaseConfirm dialog = new PurchaseConfirm(PurchaseCheckBox.this); 
-//				dialog.setVisible(true);
-//				dialog.setList(list);
-=======
 					if (set.size() > 6) { // 체크 박스 선택 개수 확인
 						JOptionPane.showMessageDialog(checkboxPnl, "복권 번호는 6개 까지만 선택 가능합니다.");
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectLotto.git
 
 					} else if (set.size() < 6) {
 
@@ -213,8 +190,6 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-<<<<<<< HEAD
-=======
 	public static void main(String[] args) {
 		new PurchaseCheckBox().setVisible(true);
 	}
@@ -235,9 +210,9 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 	}
 
 	// 구매하기 버튼 이벤트 set에 값을 넣는 과정
->>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectLotto.git
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 		for (int i = 0; i < cbs.length; i++) {
 			if (e.getSource() == cbs[i]) {
 				if (cbs[i].isSelected()) {
@@ -257,9 +232,6 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 				checkboxAllTrue();
 			}
 		}
-	}
 
-	public static void main(String[] args) {
-		new PurchaseCheckBox().setVisible(true);
 	}
 }
