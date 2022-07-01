@@ -1,8 +1,6 @@
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,13 +19,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.w3c.dom.events.MouseEvent;
-
 public class PurchaseCheckBox extends JFrame implements ActionListener {
 	private JCheckBox[] cbs;
 	private Set<Integer> set = new HashSet<>();
 	private Consumer consumer = new Consumer();
 	private JButton[] confirmRetouchBtns;
+	private Integer index = 0;
+	private boolean retouchTrue = false;
+	private JButton[] confirmRemoveBtns;
+	private JButton[] confirmCopyBtns;
+	private JLabel[][] confirmLbls;
+	private List<Integer> copyList;
+	private JButton[] confirmPasteBtns;
 
 	public PurchaseCheckBox() {
 		super("구매");
@@ -174,36 +177,50 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 			confirmPnl.add(lottoPnl[i]);
 		}
 
-		confirmRetouchBtns = new JButton[5];
-
 		JLabel countPurchaseLbl = new JLabel("총 구매 횟수: 0");
 		JLabel confirmPrice = new JLabel("금액: " + String.valueOf(consumer.getPrice()) + "원");
 
 		confirmBottomPnl.add(countPurchaseLbl);
 		confirmBottomPnl.add(confirmPrice);
 
-		JLabel[][] lbl = new JLabel[5][7];
+		confirmLbls = new JLabel[5][7];
 
 		// 구매 확인에서 첫번째 문자 넣어줌
 		for (int i = 0; i < lottoPnl.length; i++) {
 			char c = (char) ('A' + i);
-			lbl[i][0] = new JLabel(String.valueOf(c));
-			lottoPnl[i].add(lbl[i][0]);
+			confirmLbls[i][0] = new JLabel(String.valueOf(c));
+			lottoPnl[i].add(confirmLbls[i][0]);
 		}
 
 		// 구매 확인에서 로또 번호들을 나열하기 위해 label들을 생성
 		for (int i = 0; i < lottoPnl.length; i++) {
-			for (int j = 1; j < lbl[i].length; j++) {
-				lbl[i][j] = new JLabel();
-				lottoPnl[i].add(lbl[i][j]);
+			for (int j = 1; j < confirmLbls[i].length; j++) {
+				confirmLbls[i][j] = new JLabel();
+				lottoPnl[i].add(confirmLbls[i][j]);
 			}
 
 		}
 
-		// 수정 버튼 생성
+		confirmRetouchBtns = new JButton[5];
+		confirmRemoveBtns = new JButton[5];
+		confirmCopyBtns = new JButton[5];
+		confirmPasteBtns = new JButton[5];
+
+		// 수정, 삭제, 복사, 붙여넣기 버튼 생성
 		for (int i = 0; i < confirmRetouchBtns.length; i++) {
 			confirmRetouchBtns[i] = new JButton("수정");
+			confirmRemoveBtns[i] = new JButton("삭제");
+			confirmCopyBtns[i] = new JButton("복사");
+			confirmPasteBtns[i] = new JButton("붙여 넣기");
+
 			lottoPnl[i].add(confirmRetouchBtns[i]);
+			lottoPnl[i].add(confirmRemoveBtns[i]);
+			lottoPnl[i].add(confirmCopyBtns[i]);
+			lottoPnl[i].add(confirmPasteBtns[i]);
+			confirmRetouchBtns[i].setEnabled(false);
+			confirmRemoveBtns[i].setEnabled(false);
+			confirmRemoveBtns[i].setEnabled(false);
+			confirmPasteBtns[i].setVisible(false);
 		}
 
 		// 구매 번호 초기화 버튼
@@ -213,12 +230,14 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 				int price = -(1000 * lottoList.size());
 				consumer.setPrice(price);
 				confirmPrice.setText("금액: " + String.valueOf(consumer.getPrice()) + "원");
-				for (int i = 0; i < lbl.length; i++) {
-					for (int j = 1; j < lbl[i].length; j++) {
-						lbl[i][j].setText("");
+				for (int i = 0; i < confirmLbls.length; i++) {
+					for (int j = 1; j < confirmLbls[i].length; j++) {
+						confirmLbls[i][j].setText("");
 					}
 				}
 				lottoList.removeAll(lottoList);
+				confirmBtnFalse();
+				copyBtnInit();
 			}
 		});
 
@@ -230,32 +249,121 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 				System.out.println(consumer.getList());
 				lottoList.removeAll(lottoList);
 				countPurchaseLbl.setText("총 구매 횟수: " + String.valueOf(String.valueOf(consumer.getCount()) + "회"));
-				for (int i = 0; i < lbl.length; i++) {
-					for (int j = 1; j < lbl[i].length; j++) {
-						lbl[i][j].setText("");
+				for (int i = 0; i < confirmLbls.length; i++) {
+					for (int j = 1; j < confirmLbls[i].length; j++) {
+						confirmLbls[i][j].setText("");
 					}
 				}
 				lottoList.removeAll(lottoList);
+				confirmBtnFalse();
+				copyBtnInit();
 			}
 		});
-		
-		// 수정 버튼 이벤트
-		ActionListener listener = new ActionListener() {
+
+		// 수정 버튼 이벤트 // 이슈 수정을 했는데 list에 추가가되는 현상
+		ActionListener retouchListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				for (int i = 0; i < confirmRetouchBtns.length; i++) {
 					if (e.getSource() == confirmRetouchBtns[i]) {
-						System.out.println(lottoList.get(i));
-						for(int j = 0; j < lottoList.get(i).size();j++) {
-							cbs[lottoList.get(i).get(j)].setSelected(true);
+
+						retouchTrue = true;
+						menualRB.setSelected(true);
+						set.removeAll(set);
+
+						checkboxAllFalse();
+						checkboxAllInit();
+
+//						System.out.println(lottoList.get(i));
+
+						for (int j = 0; j < lottoList.get(i).size(); j++) {
+							set.add(lottoList.get(i).get(j));
+							cbs[lottoList.get(i).get(j) - 1].setEnabled(true);
+							cbs[lottoList.get(i).get(j) - 1].setSelected(true);
 						}
+
+//						System.out.println(set);
+
+						index = i;
+						copyBtnInit();
+					}
+
+				}
+
+			}
+		};
+
+		// 삭제 버튼 이벤트
+		ActionListener removeListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				for (int i = 0; i < confirmRemoveBtns.length; i++) {
+					if (e.getSource() == confirmRemoveBtns[i]) {
+						confirmRetouchBtns[lottoList.size() - 1].setEnabled(false);
+						confirmRemoveBtns[lottoList.size() - 1].setEnabled(false);
+			
+						lottoList.remove(i);
+						System.out.println(lottoList);
+						confirmLblInit();
+						for (int j = 0; j < lottoList.size(); j++) {
+							for (int k = 0; k < lottoList.get(j).size(); k++) {
+								confirmLbls[j][k + 1].setText(String.format("%02d", lottoList.get(j).get(k)));
+							}
+						}
+						consumer.setPrice(-1000);
+						confirmPrice.setText("총 금액: " + consumer.getPrice() + "원");
+						copyBtnInit();
+					}
+				}
+			}
+		};
+
+		// 복사 버튼 이벤트
+		ActionListener copyLisener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < confirmCopyBtns.length; i++) {
+					if (e.getSource() == confirmCopyBtns[i]) {
+						copyList = new ArrayList<>(lottoList.get(i));
+
+						System.out.println(copyList);
+
+						confirmCopyBtns[lottoList.size()].setVisible(false);
+						confirmPasteBtns[lottoList.size()].setVisible(true);
+
+					}
+				}
+			}
+		};
+
+		// 붙여넣기 버튼 이벤트
+		ActionListener pasteListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < confirmPasteBtns.length; i++) {
+					if (e.getSource() == confirmPasteBtns[i]) {
+						lottoList.add(copyList);
+						System.out.println(lottoList);
+						for (int j = 0; j < copyList.size(); j++) {
+							confirmLbls[i][j + 1].setText(String.format("%02d", copyList.get(j)));
+						}
+						consumer.setPrice(1000);
+						confirmPrice.setText("총 금액: " + consumer.getPrice() + "원");
+						confirmRetouchBtns[lottoList.size() - 1].setEnabled(true);
+						confirmRemoveBtns[lottoList.size() - 1].setEnabled(true);
+						copyBtnInit();
 					}
 				}
 			}
 		};
 
 		for (int i = 0; i < confirmRetouchBtns.length; i++) {
-			confirmRetouchBtns[i].addActionListener(listener);
+			confirmRetouchBtns[i].addActionListener(retouchListener);
+			confirmRemoveBtns[i].addActionListener(removeListener);
+			confirmCopyBtns[i].addActionListener(copyLisener);
+			confirmPasteBtns[i].addActionListener(pasteListener);
 		}
 //--------------------------------------------------------------------------------
 
@@ -264,93 +372,123 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 		purchaseBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) { // 5장 넘게 구매X
-					JOptionPane.showMessageDialog(purchasePnl, "복권은 한번에 5장까지 구매 가능합니다.");
+				if (retouchTrue) { // 수정 버튼을 누른 상태일때
+//					System.out.println(index);
+
+					lottoList.remove(lottoList.get(index)); // index에 해당하는 배열을 지운다.
+
+//					System.out.println("123" + lottoList.size());
+
+					List<Integer> list = new ArrayList<Integer>(set); // 새로 수정한 lotto set을 list로 만든다.
+					Collections.sort(list); // 정렬
+					lottoList.add(index, list); // 삭제한 index에 정렬한 list를 추가한다.
+
+//					System.out.println(lottoList.size());
+					checkboxAllInit(); // checkbox를 모두 초기화 시킨다.
+					checkboxAllTrue(); // checkbox를 모두 활성화 시킨다.
+					set.removeAll(set); // set을 지워준다.
+
+					for (int j = 0; j < lottoList.get(index).size(); j++) {
+						confirmLbls[index][j + 1].setText(String.format("%02d", lottoList.get(index).get(j)));
+					}
+
+					retouchTrue = false; // 다시 수정 버튼을 누르기 전으로 돌아간다.
+
 				} else {
-					if (mixRB.isSelected()) {
-						System.out.println(set);
-						Integer[] arr = new Integer[set.size()];
-						System.out.println(arr.length);
-						int countArr = 0;
-						for (Integer number : set) {
-							arr[countArr] = number;
-							countArr++;
-						}
-						for (int i = 0; i < purchaseCombo.getSelectedIndex() + 1; i++) {
-							for (int j = 0; j < arr.length; j++) {
-								set.add(arr[j]);
+					if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) { // 5장 넘게 구매X
+						JOptionPane.showMessageDialog(purchasePnl, "복권은 한번에 5장까지 구매 가능합니다.");
+
+					} else {
+						if (mixRB.isSelected()) {
+//							System.out.println(set);
+							Integer[] arr = new Integer[set.size()];
+//							System.out.println(arr.length);
+							int countArr = 0;
+
+							for (Integer number : set) {
+								arr[countArr] = number;
+								countArr++;
 							}
-							while (set.size() < 6) {
-								set.add(new Random().nextInt(45) + 1);
-							}
-
-							List<Integer> list = new ArrayList<Integer>(set);
-							Collections.sort(list);
-
-							lottoList.add(list);
-
-							checkboxAllInit();
-
-							set.removeAll(set); // set을 초기화
-						}
-
-					} else if (menualRB.isSelected()) {
-						if (set.size() == 6) {
-							List<Integer> list = new ArrayList<Integer>(set);
-							Collections.sort(list);
 
 							for (int i = 0; i < purchaseCombo.getSelectedIndex() + 1; i++) {
+								for (int j = 0; j < arr.length; j++) {
+									set.add(arr[j]);
+								}
+								while (set.size() < 6) {
+									set.add(new Random().nextInt(45) + 1);
+								}
+
+								List<Integer> list = new ArrayList<Integer>(set);
+								Collections.sort(list);
+
 								lottoList.add(list);
 
+								checkboxAllInit();
+
+								set.removeAll(set); // set을 초기화
+								consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 							}
 
-							checkboxAllInit();
-							set.removeAll(set);
+						} else if (menualRB.isSelected()) {
+							if (set.size() == 6) {
+								List<Integer> list = new ArrayList<Integer>(set);
+								Collections.sort(list);
+
+								for (int i = 0; i < purchaseCombo.getSelectedIndex() + 1; i++) {
+									lottoList.add(list);
+
+								}
+
+								checkboxAllInit();
+								set.removeAll(set);
+								consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
+							} else {
+								JOptionPane.showMessageDialog(purchasePnl, "번호 6개를 선택해 주세요");
+
+							}
 						} else {
-							JOptionPane.showMessageDialog(purchasePnl, "번호 6개를 선택해 주세요");
+							for (int i = 0; i < purchaseCombo.getSelectedIndex() + 1; i++) {
+								while (set.size() < 6) {
+									set.add(new Random().nextInt(45) + 1);
+								}
 
-						}
-					} else {
-						for (int i = 0; i < purchaseCombo.getSelectedIndex() + 1; i++) {
-							while (set.size() < 6) {
-								set.add(new Random().nextInt(45) + 1);
+								List<Integer> list = new ArrayList<Integer>(set);
+								Collections.sort(list);
+
+								lottoList.add(list);
+
+								checkboxAllInit();
+
+								set.removeAll(set); // set을 초기화
+								consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 							}
-
-							List<Integer> list = new ArrayList<Integer>(set);
-							Collections.sort(list);
-
-							lottoList.add(list);
-
-							checkboxAllInit();
-
-							set.removeAll(set); // set을 초기화
 						}
+						// 구매 확인창에 번호를 보내줌
+						for (int i = 0; i < lottoList.size(); i++) {
+							confirmRetouchBtns[i].setEnabled(true);
+							confirmRemoveBtns[i].setEnabled(true);
+							confirmCopyBtns[i].setEnabled(true);
+							for (int j = 0; j < lottoList.get(i).size(); j++) {
+								confirmLbls[i][j + 1].setText(String.format("%02d", lottoList.get(i).get(j)));
+							}
+						}
+						if (autoRB.isSelected()) {
+							checkboxAllFalse();
+						} else {
+							checkboxAllTrue();
+						}
+						System.out.println(lottoList.size());
+//						consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
+						confirmPrice.setText("총 금액: " + consumer.getPrice() + "원");
+						purchaseCombo.setSelectedIndex(0);
 					}
 
 //					System.out.println(lottoList);
 //					System.out.println(lottoList.size());
 
-					// 구매 확인창에 번호를 보내줌
-					for (int i = 0; i < lottoList.size(); i++) {
-						for (int j = 0; j < lottoList.get(i).size(); j++) {
-							lbl[i][j + 1].setText(String.format("%02d", lottoList.get(i).get(j)));
-						}
-					}
-					if (autoRB.isSelected()) {
-						checkboxAllFalse();
-					} else {
-						checkboxAllTrue();
-					}
-					consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
-					confirmPrice.setText("총 금액: " + consumer.getPrice() + "원");
-					purchaseCombo.setSelectedIndex(0);
-
 				}
 			}
 		});
-// --------------------------------------------------------------------------------
-
-//		right패널
 // --------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------
@@ -405,6 +543,31 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 	public void checkboxAllInit() {
 		for (int i = 0; i < cbs.length; i++) {
 			cbs[i].setSelected(false);
+		}
+	}
+
+	// 번호 확인 label을 초기화
+	public void confirmLblInit() {
+		for (int i = 0; i < confirmLbls.length; i++) {
+			for (int j = 1; j < confirmLbls[i].length; j++) {
+				confirmLbls[i][j].setText("");
+			}
+		}
+	}
+
+	// 붙여넣기 버튼을 안보이게 설정 하고 복사 버튼을 보이게 설정 (기본값)
+	public void copyBtnInit() {
+		for (int i = 0; i < confirmCopyBtns.length; i++) {
+			confirmPasteBtns[i].setVisible(false);
+			confirmCopyBtns[i].setVisible(true);
+		}
+	}
+	
+	
+	public void confirmBtnFalse() {
+		for(int i = 0; i < confirmRetouchBtns.length;i++) {
+			confirmRetouchBtns[i].setEnabled(false);
+			confirmRemoveBtns[i].setEnabled(false);
 		}
 	}
 
