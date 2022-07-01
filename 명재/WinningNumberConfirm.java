@@ -10,11 +10,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import java.awt.Font;
+
+import java.awt.FlowLayout;
 
 public class WinningNumberConfirm extends JFrame {
 	private List<Integer> lottoList;
-	private Set<Integer> set;
 	private List<List<Integer>> list = new ArrayList<>();
 	private Random random;
 	private Integer bonus;
@@ -24,9 +24,7 @@ public class WinningNumberConfirm extends JFrame {
 
 		JPanel allPnl = new JPanel();
 		JPanel topPnl = new JPanel();
-		
 		JPanel myLottoNumberPnl = new JPanel();
-		myLottoNumberPnl.setFont(new Font("굴림", Font.PLAIN, 20));
 		JScrollPane myLottoScrollPane = new JScrollPane();
 
 		BoxLayout allBox = new BoxLayout(allPnl, BoxLayout.Y_AXIS);
@@ -40,7 +38,7 @@ public class WinningNumberConfirm extends JFrame {
 		listMake();
 		System.out.println(lottoList);
 		System.out.println(list.size());
-		
+
 //		topPnl 부분
 // --------------------------------------------------------------------------------
 		JLabel titleLbl = new JLabel("제 **** 회차 번호 ");
@@ -64,13 +62,15 @@ public class WinningNumberConfirm extends JFrame {
 // --------------------------------------------------------------------------------	
 
 		JPanel[] myLottoPnl = new JPanel[list.size()];
-		JLabel[][] myLottoLbl = new JLabel[myLottoPnl.length][3];
+		JLabel[][] myLottoLbl = new JLabel[myLottoPnl.length][8];
 
 		for (int i = 0; i < myLottoPnl.length; i++) {
 			myLottoPnl[i] = new JPanel();
 //			BoxLayout myLottoPnlBox = new BoxLayout(myLottoPnl[i], BoxLayout.X_AXIS);
 //			myLottoPnl[i].setLayout(myLottoPnlBox);
-			
+
+			myLottoPnl[i].setLayout(new FlowLayout(FlowLayout.CENTER, 30, 0));
+
 			for (int j = 0; j < myLottoLbl[i].length; j++) {
 				myLottoLbl[i][j] = new JLabel();
 				myLottoPnl[i].add(myLottoLbl[i][j]);
@@ -78,43 +78,42 @@ public class WinningNumberConfirm extends JFrame {
 			myLottoNumberPnl.add(myLottoPnl[i]);
 
 		}
-		
-		for(int i = 0; i < myLottoPnl.length;i++) {
+
+		for (int i = 0; i < myLottoPnl.length; i++) {
 			char c = (char) ('A' + i);
 			myLottoLbl[i][0].setText(String.valueOf(c));
 		}
-		
-		for(int i = 0; i < myLottoPnl.length;i++) {
-			
-			myLottoLbl[i][2].setText(String.valueOf(list.get(i)));
-			
+
+		for (int i = 0; i < myLottoPnl.length; i++) {
+			for (int j = 0; j < 6; j++) {
+				myLottoLbl[i][j + 2].setText(String.format("%02d", list.get(i).get(j)));
+			}
+
 			List<Integer> listDuplicate = new ArrayList<>();
 			listDuplicate.addAll(lottoList);
 			listDuplicate.retainAll(list.get(i));
-			if(listDuplicate.size() == 6) {
+			if (listDuplicate.size() == 6) {
 				myLottoLbl[i][1].setText("1등");
-			} else if(listDuplicate.size() == 5) {
-				if(list.get(i).contains(bonus)) {
+			} else if (listDuplicate.size() == 5) {
+				if (list.get(i).contains(bonus)) {
 					myLottoLbl[i][1].setText("2등");
 				} else {
 					myLottoLbl[i][1].setText("3등");
 				}
-			} else if(listDuplicate.size() == 4) {
+			} else if (listDuplicate.size() == 4) {
 				myLottoLbl[i][1].setText("4등");
-			} else if(listDuplicate.size() == 3) {
+			} else if (listDuplicate.size() == 3) {
 				myLottoLbl[i][1].setText("5등");
 			} else {
-				myLottoLbl[i][1].setText("아쉽지만 다음 기회에");
+				myLottoLbl[i][1].setText("X");
 			}
-			
+
 		}
-		
+
 		myLottoScrollPane.setViewportView(myLottoNumberPnl);
 
 // --------------------------------------------------------------------------------
 
-		
-		
 // --------------------------------------------------------------------------------
 
 		allPnl.add(topPnl);
@@ -124,7 +123,7 @@ public class WinningNumberConfirm extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
-	public Set<Integer> lotto() {
+	public Set<Integer> lotto() { // 다른곳에서 받아올 값
 		Set<Integer> set = new HashSet<>();
 		random = new Random();
 
@@ -135,7 +134,7 @@ public class WinningNumberConfirm extends JFrame {
 		return set;
 	}
 
-	public void winningNumber() {
+	public void winningNumber() { // 다른곳에서 받아올 값
 		Set<Integer> lottoSet = new HashSet<>(); // 확인을 위한 lotto번호 실제로는 값을 가져 와서 비교
 		random = new Random();
 
@@ -152,7 +151,7 @@ public class WinningNumberConfirm extends JFrame {
 		Collections.sort(lottoList);
 	}
 
-	public void listMake() {
+	public void listMake() { // 다른곳에서 받아올값
 		for (int i = 0; i < 100; i++) {
 			List<Integer> loList = new ArrayList<>(lotto());
 			Collections.sort(loList);
