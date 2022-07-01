@@ -144,6 +144,11 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				checkboxAllInit();
+				if (autoRB.isSelected()) {
+					checkboxAllFalse();
+				} else {
+					checkboxAllTrue();
+				}
 				set.removeAll(set);
 			}
 		});
@@ -219,7 +224,7 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 			lottoPnl[i].add(confirmPasteBtns[i]);
 			confirmRetouchBtns[i].setEnabled(false);
 			confirmRemoveBtns[i].setEnabled(false);
-			confirmRemoveBtns[i].setEnabled(false);
+			confirmCopyBtns[i].setEnabled(false);
 			confirmPasteBtns[i].setVisible(false);
 		}
 
@@ -303,15 +308,18 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 					if (e.getSource() == confirmRemoveBtns[i]) {
 						confirmRetouchBtns[lottoList.size() - 1].setEnabled(false);
 						confirmRemoveBtns[lottoList.size() - 1].setEnabled(false);
-			
+						confirmCopyBtns[lottoList.size() - 1].setEnabled(false);
+
 						lottoList.remove(i);
 						System.out.println(lottoList);
 						confirmLblInit();
+
 						for (int j = 0; j < lottoList.size(); j++) {
 							for (int k = 0; k < lottoList.get(j).size(); k++) {
 								confirmLbls[j][k + 1].setText(String.format("%02d", lottoList.get(j).get(k)));
 							}
 						}
+
 						consumer.setPrice(-1000);
 						confirmPrice.setText("총 금액: " + consumer.getPrice() + "원");
 						copyBtnInit();
@@ -353,6 +361,7 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 						confirmPrice.setText("총 금액: " + consumer.getPrice() + "원");
 						confirmRetouchBtns[lottoList.size() - 1].setEnabled(true);
 						confirmRemoveBtns[lottoList.size() - 1].setEnabled(true);
+						confirmCopyBtns[lottoList.size() - 1].setEnabled(true);
 						copyBtnInit();
 					}
 				}
@@ -562,12 +571,12 @@ public class PurchaseCheckBox extends JFrame implements ActionListener {
 			confirmCopyBtns[i].setVisible(true);
 		}
 	}
-	
-	
+
 	public void confirmBtnFalse() {
-		for(int i = 0; i < confirmRetouchBtns.length;i++) {
+		for (int i = 0; i < confirmRetouchBtns.length; i++) {
 			confirmRetouchBtns[i].setEnabled(false);
 			confirmRemoveBtns[i].setEnabled(false);
+			confirmCopyBtns[i].setEnabled(false);
 		}
 	}
 
