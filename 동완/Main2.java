@@ -171,19 +171,19 @@ public class Main2 extends JFrame implements ActionListener {
 		pnlRight.setLayout(null);
 		
 		
-		JPanel pnlball = new JPanel();
-		pnlball.setBounds(41, 68, 200, 315);
-		pnlRight.add(pnlball);
-		
-		GridLayout grid2 = new GridLayout(5, 6);
-		pnlball.setLayout(grid2); // 패널안에서 정렬
-		
-		ball = new JCheckBox[30];  // 선택 완료쪽 빈공
-		for(int i = 0; i < ball.length; i++) {
-			ball[i] = new JCheckBox();
-			pnlball.add(ball[i]);
-			ball[i].setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\ball-01.png"));
-		}
+//		JPanel pnlball = new JPanel();
+//		pnlball.setBounds(41, 68, 200, 315);
+//		pnlRight.add(pnlball);
+//		
+//		GridLayout grid2 = new GridLayout(5, 6);
+//		pnlball.setLayout(grid2); // 패널안에서 정렬
+//		
+//		ball = new JCheckBox[30];  // 선택 완료쪽 빈공
+//		for(int i = 0; i < ball.length; i++) {
+//			ball[i] = new JCheckBox();
+//			pnlball.add(ball[i]);
+//			ball[i].setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\ball-01.png"));
+//		}
 		
 		
 		
@@ -200,35 +200,41 @@ public class Main2 extends JFrame implements ActionListener {
 		JPanel pnl1 = new JPanel();
 		pnl1.setBounds(0, 67, 467, 64);
 		pnlRight.add(pnl1);
-		pnl1.setLayout(null);
+	//	pnl1.setLayout(null);
+		
+//		GridLayout grid2 = new GridLayout(5, 6);
+//		pnlball.setLayout(grid2); // 패널안에서 정렬
 		
 	
+		
+		
 		
 		JLabel lblA = new JLabel("A");
 		lblA.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 14));
 		lblA.setBounds(25, 26, 19, 15);
 		pnl1.add(lblA);
 		
+		ball = new JCheckBox[6];  // 선택 완료쪽 빈공
+		for(int i = 0; i < ball.length; i++) {
+			ball[i] = new JCheckBox();
+			pnl1.add(ball[i]);
+			ball[i].setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\ball-01.png"));
+		}
 		
-		
-		
-		JButton btnA = new JButton("번호복사");
-		btnA.setBounds(375, 22, 75, 23);
-		btnA.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 10));
-		btnA.setBackground(Color.white);
-		pnl1.add(btnA);
-		
-		JButton btnAdelet = new JButton("삭제");
-		btnAdelet.setBounds(310, 22, 60, 23);
-		btnAdelet.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 10));
-		btnAdelet.setBackground(Color.white);
-		pnl1.add(btnAdelet);
-		
-		JButton btnAchange = new JButton("수정");
-		btnAchange.setBounds(245, 22, 60, 23);
+		JButton btnAchange = new JButton("수정");	
 		btnAchange.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 10));
 		btnAchange.setBackground(Color.white);
 		pnl1.add(btnAchange);
+				
+		JButton btnAdelet = new JButton("삭제");	
+		btnAdelet.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 10));
+		btnAdelet.setBackground(Color.white);
+		pnl1.add(btnAdelet);
+				
+		JButton btnA = new JButton("번호복사");		
+		btnA.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 10));
+		btnA.setBackground(Color.white);
+		pnl1.add(btnA);
 		
 		JPanel pnl2 = new JPanel();
 		pnl2.setBounds(0, 130, 467, 64);
