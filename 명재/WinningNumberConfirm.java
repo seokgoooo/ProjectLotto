@@ -24,6 +24,7 @@ public class WinningNumberConfirm extends JFrame {
 
 		JPanel allPnl = new JPanel();
 		JPanel topPnl = new JPanel();
+		
 		JPanel myLottoNumberPnl = new JPanel();
 		myLottoNumberPnl.setFont(new Font("굴림", Font.PLAIN, 20));
 		JScrollPane myLottoScrollPane = new JScrollPane();
