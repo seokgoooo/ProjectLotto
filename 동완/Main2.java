@@ -54,7 +54,7 @@ public class Main2 extends JFrame implements ActionListener {
 		
 		
 		JButton btn2 = new JButton(); // 혼합선택 버튼
-		btn2.setBounds(44, 265, 138, 136);
+		btn2.setBounds(44, 263, 138, 136);
 		btn2.setIcon(new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼\\btn-01.png"));
 		mainPnl.add(btn2);
 		
