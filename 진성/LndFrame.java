@@ -1,5 +1,5 @@
 package 진성;
-import java.awt.Color;
+import java.awt.Color;import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Scrollbar;
 import java.awt.event.MouseAdapter;
@@ -23,9 +23,9 @@ import javax.swing.JLabel;
 
 public class LndFrame extends JFrame {
 	private JCheckBox[] ball;
-	private JCheckBox[][] Rball = new JCheckBox[5][6];
-	private JPanel[] ballPnl = new JPanel[5];
-	private JLabel[] lblA = new JLabel[5];
+	private JCheckBox[][] Rball = new JCheckBox[20][6];
+	private JPanel[] ballPnl = new JPanel[20];
+	private JLabel[] lblA = new JLabel[20];
 	private JScrollPane sp = new JScrollPane();
 	
 	public LndFrame() {
@@ -33,14 +33,14 @@ public class LndFrame extends JFrame {
 		
 		JPanel mainpnl = new JPanel();
 		getContentPane().add(mainpnl);
-		mainpnl.setLayout(null);
+//		mainpnl.setLayout(null);
 		
 		JPanel pnllist = new JPanel();
-		pnllist.setBounds(12, 94, 570, 415);
-		mainpnl.add(pnllist);
+//		pnllist.setBounds(12, 94, 570, 415);
+//		mainpnl.add(pnllist);
 		
 		JLabel mainlbl = new JLabel("역대 당첨 번호");
-		mainlbl.setBounds(0, 0, 594, 84);
+//		mainlbl.setBounds(0, 0, 594, 84);
 		mainlbl.setHorizontalAlignment(JLabel.CENTER);// 글짜 가운데정렬
 		mainlbl.setForeground(Color.white);
 		mainlbl.setFont(new Font("휴먼엑스포", Font.BOLD, 45));
@@ -48,8 +48,8 @@ public class LndFrame extends JFrame {
 		mainlbl.setOpaque(true); //컬러 넣을려면 이거넣어야함
 		mainpnl.add(mainlbl);
 		
-		//BoxLayout box = new BoxLayout(pnllist, BoxLayout.Y_AXIS);
-		//pnllist.setLayout(box);
+		BoxLayout box = new BoxLayout(pnllist, BoxLayout.Y_AXIS);
+		pnllist.setLayout(box);
 		
 		
 		for (int i = 0; i < Rball.length; i++) {
@@ -63,10 +63,11 @@ public class LndFrame extends JFrame {
 			}
 			pnllist.add(ballPnl[i]);
 		}
-		//sp.setViewportView(pnllist);
+		sp.setPreferredSize(new Dimension(500, 260));
+		sp.setViewportView(pnllist);
 		
 		mainpnl.add(sp);
-	
+		add(mainpnl);
 		
 		
 		setSize(600, 600);
