@@ -42,8 +42,8 @@ public class LottoNumberDrawing {
 		this.set = set;
 		this.bonus = bonus;
 	}
-
-	public Set<Integer> LottoRandom () { // 1등  메소드
+    // () 값이 없는건 안에서 다 활동후 return 값에 저장됨. () 값이 잇는건 똑같이 (값을 넣어줘야)됨.
+	public Set<Integer> LottoRandom () { // 1등  메소드  // 
 		set = new HashSet<>();
 		bonus = (random.nextInt(45) + 1);
 		while (set.size() < 6) { // 세트사이즈만큼
