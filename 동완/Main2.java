@@ -47,34 +47,34 @@ public class Main2 extends JFrame implements ActionListener {
 		mainPnl.setLayout(null);
 		
 		JButton btn1 = new JButton(); // 수동선택 버튼
-		btn1.setBounds(45, 107, 138, 136);
+		btn1.setBounds(45, 115, 138, 136);
 		btn1.setIcon(new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼\\btn-06.png"));
 		mainPnl.add(btn1);
 		btn1.setEnabled(false);
 		
 		
 		JButton btn2 = new JButton(); // 혼합선택 버튼
-		btn2.setBounds(45, 245, 138, 136);
+		btn2.setBounds(44, 265, 138, 136);
 		btn2.setIcon(new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼\\btn-01.png"));
 		mainPnl.add(btn2);
 		
 		JButton btn3 = new JButton(); // 자동선택 버튼
-		btn3.setBounds(45, 383, 138, 136);
+		btn3.setBounds(45, 411, 138, 136);
 		btn3.setIcon(new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼\\btn-02.png"));
 		mainPnl.add(btn3);
 		
 		JComboBox comboBox = new JComboBox(setNum);  // 수량 정하는 콤보박스
-		comboBox.setBounds(45, 530, 40, 20);
+		comboBox.setBounds(317, 524, 50, 25);
 		mainPnl.add(comboBox);
 		
 		JButton btnEnd = new JButton();  // 확인버튼
-		btnEnd.setIcon(new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼\\btn-04.png"));
-		btnEnd.setBounds(90, 530, 93, 20);
+		btnEnd.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\수정-08.png"));
+		btnEnd.setBounds(223, 522, 90, 30);
 		mainPnl.add(btnEnd);
 		
 		JButton btnReset = new JButton();  // 초기화 버튼
-		btnReset.setIcon(new ImageIcon("C:\\Users\\Administrator\\Desktop\\로또 번호\\버튼\\btn-05.png"));
-		btnReset.setBounds(280, 522, 125, 30);
+		btnReset.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\수정-09.png"));
+		btnReset.setBounds(373, 522, 90, 30);
 		mainPnl.add(btnReset);
 
 //		ImageIcon icon = new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\back-01.png");  // 배경이미지
@@ -165,6 +165,23 @@ public class Main2 extends JFrame implements ActionListener {
 		mainPnl.add(pnlRight);
 		pnlRight.setLayout(null);
 		
+		
+		JPanel pnlball = new JPanel();
+		pnlball.setBounds(41, 68, 200, 315);
+		pnlRight.add(pnlball);
+		
+		GridLayout grid2 = new GridLayout(5, 6);
+		pnlball.setLayout(grid2); // 패널안에서 정렬
+		
+		ball = new JCheckBox[30];  // 선택 완료쪽 빈공
+		for(int i = 0; i < ball.length; i++) {
+			ball[i] = new JCheckBox();
+			pnlball.add(ball[i]);
+			ball[i].setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\ball-01.png"));
+		}
+		
+		
+		
 		JLabel lblCheck = new JLabel("선택번호 확인");
 		lblCheck.setBounds(25, 15, 120, 30);
 		lblCheck.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 14));
@@ -187,11 +204,7 @@ public class Main2 extends JFrame implements ActionListener {
 		lblA.setBounds(25, 26, 19, 15);
 		pnl1.add(lblA);
 		
-		ball = new JCheckBox[30];
-		for(int i = 0; i < ball.length; i++) {
-			ball[i] = new JCheckBox();
-			pnl1.add(ball[i]);
-		}
+		
 		
 		
 		JButton btnA = new JButton("번호복사");
@@ -240,9 +253,7 @@ public class Main2 extends JFrame implements ActionListener {
 		btnBchange.setBackground(Color.white);
 		pnl2.add(btnBchange);
 		
-		JPanel pnlball = new JPanel();
-		pnlball.setBounds(55, -63, 178, 317);
-		pnl2.add(pnlball);
+		
 					
 		JPanel pnl3 = new JPanel();
 		pnl3.setBounds(0, 193, 467, 64);
@@ -329,14 +340,14 @@ public class Main2 extends JFrame implements ActionListener {
 		pnl5.add(btnEchange);
 		
 		JLabel lbltotal = new JLabel("결제금액 : ");
-		lbltotal.setFont(new Font("맑은 고딕", Font.BOLD, 18));
 		lbltotal.setBounds(158, 388, 120, 50);
+		lbltotal.setFont(new Font("맑은 고딕", Font.BOLD, 18));
 		pnlRight.add(lbltotal);
 		mainPnl.add(mainlbl);
 		
 		JLabel lbltotal2 = new JLabel("2000원");
-		lbltotal2.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
 		lbltotal2.setBounds(260, 388, 120, 50);
+		lbltotal2.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
 		pnlRight.add(lbltotal2);
 		
 		JButton btnBuy = new JButton();
@@ -345,11 +356,18 @@ public class Main2 extends JFrame implements ActionListener {
 		pnlRight.add(btnBuy);
 		mainPnl.add(mainlbl);
 		
+		JButton btnHome = new JButton();
+		btnHome.setBounds(30, 15, 50, 50);
+		mainPnl.add(btnHome);
+		btnHome.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\home.png"));
+		btnHome.setBorderPainted(false);
 		
-		// 수정중
+		
+		
 		setResizable(false);
 		setSize(1000, 600);
-
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null); // 창이 가운데에서 출력된다
 						
 	}
 	@Override
