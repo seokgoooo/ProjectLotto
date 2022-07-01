@@ -16,10 +16,12 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton mainNumberLotteryButton;
 	private JButton mainWinnerHistoryButton;
 	private JButton mainCheckWinButton;
+	private BuyFrame buyFrame;
 
 	public MainFrame() {
 		super("로또 추첨");
 		Toolkit kit = Toolkit.getDefaultToolkit();
+		buyFrame = new BuyFrame();
 
 		setSize(1000, 600);
 		setResizable(false);
@@ -51,8 +53,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		mainImagePanel.setLayout(null);
 		wrapPanel.add(mainImagePanel);
 
-		URL url = MainFrame.class.getClassLoader().getResource("main_01.png");
-		JLabel mainImageLabel = new JLabel(new ImageIcon(kit.getImage(url)));
+		URL mainImageUrl = MainFrame.class.getClassLoader().getResource("main_01.png");
+		JLabel mainImageLabel = new JLabel(new ImageIcon(kit.getImage(mainImageUrl)));
 		mainImageLabel.setBounds(0, 0, 984, 352);
 		mainImagePanel.add(mainImageLabel);
 
@@ -71,29 +73,29 @@ public class MainFrame extends JFrame implements ActionListener {
 		// 메인 화면 구매하기 버튼 구현
 		mainBuyButton = new JButton();
 		mainBuyButton.setBounds(0, 416, 250, 145);
-		URL url1 = MainFrame.class.getClassLoader().getResource("mainButton_01.png");
-		mainBuyButton.setIcon(new ImageIcon(kit.getImage(url1)));
+		URL mainBuyUrl = MainFrame.class.getClassLoader().getResource("mainButton_01.png");
+		mainBuyButton.setIcon(new ImageIcon(kit.getImage(mainBuyUrl)));
 		wrapPanel.add(mainBuyButton);
 
 		// 메인 화면 번호추첨 버튼 구현
 		mainNumberLotteryButton = new JButton();
 		mainNumberLotteryButton.setBounds(250, 416, 250, 145);
-		URL url2 = MainFrame.class.getClassLoader().getResource("mainButton_02.png");
-		mainNumberLotteryButton.setIcon(new ImageIcon(kit.getImage(url2)));
+		URL mainNumberLotteryUrl = MainFrame.class.getClassLoader().getResource("mainButton_02.png");
+		mainNumberLotteryButton.setIcon(new ImageIcon(kit.getImage(mainNumberLotteryUrl)));
 		wrapPanel.add(mainNumberLotteryButton);
 
 		// 메인 화면 역대당첨번호 버튼 구현
 		mainWinnerHistoryButton = new JButton();
 		mainWinnerHistoryButton.setBounds(500, 416, 250, 146);
-		URL url3 = MainFrame.class.getClassLoader().getResource("mainButton_03.png");
-		mainWinnerHistoryButton.setIcon(new ImageIcon(kit.getImage(url3)));
+		URL mainWinnerHistoryUrl = MainFrame.class.getClassLoader().getResource("mainButton_03.png");
+		mainWinnerHistoryButton.setIcon(new ImageIcon(kit.getImage(mainWinnerHistoryUrl)));
 		wrapPanel.add(mainWinnerHistoryButton);
 
 		// 메인 화면 당첨확인 버튼 구현
 		mainCheckWinButton = new JButton();
 		mainCheckWinButton.setBounds(734, 416, 250, 145);
-		URL url4 = MainFrame.class.getClassLoader().getResource("mainButton_04.png");
-		mainCheckWinButton.setIcon(new ImageIcon(kit.getImage(url4)));
+		URL mainCheckWinUrl = MainFrame.class.getClassLoader().getResource("mainButton_04.png");
+		mainCheckWinButton.setIcon(new ImageIcon(kit.getImage(mainCheckWinUrl)));
 		wrapPanel.add(mainCheckWinButton);
 
 		mainBuyButton.addActionListener(this);
@@ -108,7 +110,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		Object click = e.getSource();
 		if (click == mainBuyButton) {
 //			ToDo : 구매하기 버튼을 누르면 구매하기 창으로 이동
-			new BuyFrame().setVisible(true);
+			buyFrame.setVisible(true);
 		} else if (click == mainNumberLotteryButton) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
 
