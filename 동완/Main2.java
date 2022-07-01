@@ -36,6 +36,11 @@ public class Main2 extends JFrame implements ActionListener {
 
 		JFrame frm = new JFrame();
 		JPanel mainPnl = new JPanel();
+		
+		JLabel lblTitle = new JLabel();
+		lblTitle.setBounds(0, 0, 1000, 75);
+		lblTitle.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\title.png"));
+		mainPnl.add(lblTitle);
 
 		JPanel pnlLeft = new JPanel();
 		pnlLeft.setBounds(222, 144, 242, 373);
@@ -312,7 +317,7 @@ public class Main2 extends JFrame implements ActionListener {
 		pnl4.add(btnDchange);
 		
 		JPanel pnl5 = new JPanel();
-		pnl5.setBounds(0, 320, 467, 64);
+		pnl5.setBounds(0, 320, 467, 64); 
 		pnlRight.add(pnl5);
 		pnl5.setLayout(null);
 		
@@ -361,6 +366,8 @@ public class Main2 extends JFrame implements ActionListener {
 		mainPnl.add(btnHome);
 		btnHome.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\home.png"));
 		btnHome.setBorderPainted(false);
+		
+		
 		
 		
 		
