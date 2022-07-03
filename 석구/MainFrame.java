@@ -112,13 +112,13 @@ public class MainFrame extends JFrame implements ActionListener {
 			buyFrame.setVisible(true);
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
-
+lotteryFrame.setVisible(true);
 		} else if (click == historyBtn) {
 //			ToDo : 역대당첨번호 버튼을 누르면 역대당첨번호 창으로 이동
 
 		} else if (click == checkBtn) {
 //			ToDo : 당첨확인 버튼을 누르면 당첨확인 창으로 이동
-
+// 얘는 lotteryFrame 으로 합체
 		}
 	}
 
