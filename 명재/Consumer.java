@@ -21,7 +21,8 @@ public class Consumer {
 	}
 	
 	public void setLottoList(List<List<Integer>> lottoList) {
-		list.add(lottoList);
+		List<List<Integer>> loList = new ArrayList<>(lottoList);
+		list.add(loList);
 		this.lottoList = lottoList;
 		count++;
 //		System.out.println(lottoList);
