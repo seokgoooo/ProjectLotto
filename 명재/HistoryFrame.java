@@ -33,17 +33,33 @@ public class HistoryFrame extends JFrame {
 	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("resources/buyDefault.png");
 	private ImageIcon defaultBall = new ImageIcon(defaultBallImg);
 
+	
+	
+	public List<List<Integer>> getLottoList() {
+		return lottoList;
+	}
+
+	public void setLottoList(List<List<Integer>> lottoList) {
+		this.lottoList = lottoList;
+	}
+
 	public List<Integer> getCurrentLotto() {
 		return currentLotto;
 	}
 
 	public void setCurrentLotto(List<Integer> currentLotto) {
-		this.currentLotto = currentLotto;
-		System.out.println(this.currentLotto);
-		lottoList.add(currentLotto);
-		for (int j = 0; j < 6; j++) {
-			basicBall[(int) Math.ceil(lottoList.size() / 5.0) - 1][0][j]
-					.setIcon(new ImageIcon(getColorNumber(currentLotto.get(j) - 1)));
+		if (currentLotto.size() == 0) {
+
+		} else {
+			System.out.println(currentLotto);
+			this.currentLotto = currentLotto;
+			System.out.println(this.currentLotto);
+			lottoList.add(currentLotto);
+			System.out.println(basicBall[0]);
+			for (int j = 0; j < 6; j++) {
+				basicBall[(int) Math.ceil(lottoList.size() / 5.0) - 1][0][j]
+						.setIcon(new ImageIcon(getColorNumber(currentLotto.get(j))));
+			}
 		}
 
 	}
@@ -53,9 +69,14 @@ public class HistoryFrame extends JFrame {
 	}
 
 	public void setCurrentBonus(Integer currentBonus) {
-		this.currentBonus = currentBonus;
-		bonus.add(currentBonus);
-		bonusBall[(int) Math.ceil(lottoList.size() / 5.0) - 1][0].setIcon(new ImageIcon(getColorNumber(this.currentBonus)));
+		if (currentBonus == 0) {
+
+		} else {
+			this.currentBonus = currentBonus;
+			bonus.add(currentBonus);
+			bonusBall[(int) Math.ceil(lottoList.size() / 5.0) - 1][0]
+					.setIcon(new ImageIcon(getColorNumber(this.currentBonus)));
+		}
 	}
 
 	public HistoryFrame() {
