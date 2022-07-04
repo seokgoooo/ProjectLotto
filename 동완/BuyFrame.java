@@ -39,8 +39,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 	private boolean changeTrue = false;
 	private int index = 0;
 	private List<Integer> copyList;
-	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("resources/buyDefault.png");
+	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("buyDefault.png");
 	private ImageIcon defaultBall = new ImageIcon(defaultBallImg);
+	private JLabel rightBottomTextLbl;
 
 	public Consumer getConsumer() {
 		return consumer;
@@ -52,7 +53,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 
 	public BuyFrame() {
 		super("로또 구매");
-		System.out.println(BuyFrame.class.getClassLoader());
 		List<List<Integer>> lottoList = new ArrayList<>();
 
 		setSize(1000, 600);
@@ -68,20 +68,31 @@ public class BuyFrame extends JFrame implements ActionListener {
 
 		JButton homeBtn = new JButton();
 		homeBtn.setBounds(30, 15, 50, 50);
-		URL homeBtnUrl = BuyFrame.class.getClassLoader().getResource("resources/homeBlack.png");
+		URL homeBtnUrl = BuyFrame.class.getClassLoader().getResource("homeBlack.png");
 		homeBtn.setIcon(new ImageIcon(homeBtnUrl));
 		wrapPnl.add(homeBtn);
 
 		homeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int price = -(1000 * lottoList.size());
+				consumer.setPrice(price);
+				rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
+				for (int i = 0; i < rightLbl.length; i++) {
+					for (int j = 1; j < rightLbl[i].length; j++) {
+						rightLbl[i][j].setIcon(defaultBall);
+					}
+				}
+				lottoList.removeAll(lottoList);
+				pasteBtnFalse();
+				copyBtnReset();
 				dispose();
 			}
 		});
 
 		JLabel titleImgLbl = new JLabel();
 		titleImgLbl.setBounds(0, 0, 1000, 75);
-		URL titleImgUrl = BuyFrame.class.getClassLoader().getResource("resources/title.png");
+		URL titleImgUrl = BuyFrame.class.getClassLoader().getResource("title.png");
 		titleImgLbl.setIcon(new ImageIcon(titleImgUrl));
 		wrapPnl.add(titleImgLbl);
 
@@ -103,9 +114,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 		// 수동선택 라디오 버튼
 		JRadioButton manualRBtn = new JRadioButton();
 		manualRBtn.setBounds(45, 115, 138, 136);
-		URL manualUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_01.png");
+		URL manualUrl = BuyFrame.class.getClassLoader().getResource("buyButton_01.png");
 		manualRBtn.setIcon(new ImageIcon(manualUrl));
-		URL manualSUrl = BuyFrame.class.getClassLoader().getResource("resources/selectedBuyButton_01.png");
+		URL manualSUrl = BuyFrame.class.getClassLoader().getResource("selectedBuyButton_01.png");
 		manualRBtn.setSelectedIcon(new ImageIcon(manualSUrl));
 		manualRBtn.setSelected(true);
 		wrapPnl.add(manualRBtn);
@@ -113,18 +124,18 @@ public class BuyFrame extends JFrame implements ActionListener {
 		// 혼합선택 라디오 버튼
 		JRadioButton semiAutoRBtn = new JRadioButton();
 		semiAutoRBtn.setBounds(45, 263, 138, 136);
-		URL semiAutoUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_02.png");
+		URL semiAutoUrl = BuyFrame.class.getClassLoader().getResource("buyButton_02.png");
 		semiAutoRBtn.setIcon(new ImageIcon(semiAutoUrl));
-		URL semiAutoSUrl = BuyFrame.class.getClassLoader().getResource("resources/selectedBuyButton_02.png");
+		URL semiAutoSUrl = BuyFrame.class.getClassLoader().getResource("selectedBuyButton_02.png");
 		semiAutoRBtn.setSelectedIcon(new ImageIcon(semiAutoSUrl));
 		wrapPnl.add(semiAutoRBtn);
 
 		// 자동선택 라디오 버튼
 		JRadioButton autoRBtn = new JRadioButton();
 		autoRBtn.setBounds(45, 411, 138, 136);
-		URL autoUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_03.png");
+		URL autoUrl = BuyFrame.class.getClassLoader().getResource("buyButton_03.png");
 		autoRBtn.setIcon(new ImageIcon(autoUrl));
-		URL autoSUrl = BuyFrame.class.getClassLoader().getResource("resources/selectedBuyButton_03.png");
+		URL autoSUrl = BuyFrame.class.getClassLoader().getResource("selectedBuyButton_03.png");
 		autoRBtn.setSelectedIcon(new ImageIcon(autoSUrl));
 		wrapPnl.add(autoRBtn);
 
@@ -148,6 +159,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				ballAllSelected();
 				ballAllReset();
+				numberBoxAllBlack(); // new
 				lottoSet.removeAll(lottoSet);
 			}
 		});
@@ -160,6 +172,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 				lottoSet.removeAll(lottoSet);
 			}
 		});
+
 		// 수량 정하는 콤보박스
 		JComboBox<Integer> purchaseCombo = new JComboBox<>(comboNumber);
 		purchaseCombo.setBounds(317, 524, 50, 25);
@@ -168,14 +181,14 @@ public class BuyFrame extends JFrame implements ActionListener {
 		// 왼쪽 확인 버튼
 		JButton leftCheckBtn = new JButton();
 		leftCheckBtn.setBounds(223, 522, 90, 30);
-		URL leftCheckUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_04.png");
+		URL leftCheckUrl = BuyFrame.class.getClassLoader().getResource("buyButton_04.png");
 		leftCheckBtn.setIcon(new ImageIcon(leftCheckUrl));
 		wrapPnl.add(leftCheckBtn);
 
 		// 왼쪽 번호 초기화 버튼
 		JButton leftResetBtn = new JButton();
 		leftResetBtn.setBounds(373, 522, 90, 30);
-		URL leftResetUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_05.png");
+		URL leftResetUrl = BuyFrame.class.getClassLoader().getResource("buyButton_05.png");
 		leftResetBtn.setIcon(new ImageIcon(leftResetUrl));
 		wrapPnl.add(leftResetBtn);
 
@@ -196,10 +209,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 		// 배경화면 image 적용
 		JLabel mainBgLbl = new JLabel();
 		mainBgLbl.setBounds(0, 0, 995, 580);
-		URL url = BuyFrame.class.getClassLoader().getResource("resources/back_01.png");
+		URL url = BuyFrame.class.getClassLoader().getResource("back_01.png");
 		mainBgLbl.setIcon(new ImageIcon(url));
 		wrapPnl.add(mainBgLbl);
-
 //		-----------------------------------------------------------------------------------------
 //		1 ~ 45 번호 image 구현
 //		-----------------------------------------------------------------------------------------
@@ -215,15 +227,16 @@ public class BuyFrame extends JFrame implements ActionListener {
 			numberBox[i].addActionListener(this);
 			leftPnl.add(numberBox[i]);
 		}
-
 //		-----------------------------------------------------------------------------------------
 //		1 ~ 45 번호 image 부분 끝
 //		번호 image 아래 콤보박스 확인 초기화 버튼 구현 / 동작
 //		-----------------------------------------------------------------------------------------
 
 		JLabel leftPriceLbl = new JLabel("선택금액 : " + 1000 + "원");
-		leftPriceLbl.setBounds(250, 100, 200, 50);
+		leftPriceLbl.setBounds(222, 111, 200, 50);
 		leftPriceLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
+		leftPriceLbl.setBackground(Color.DARK_GRAY);
+		leftPriceLbl.setHorizontalAlignment(JLabel.CENTER);
 		wrapPnl.add(leftPriceLbl);
 
 		purchaseCombo.addActionListener(new ActionListener() {
@@ -233,7 +246,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 				leftPriceLbl.setText("선택금액 : " + p + "원");
 			}
 		});
-
 //		-----------------------------------------------------------------------------------------
 //		왼쪽 (구매) Frame 끝
 
@@ -253,7 +265,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 
 		JButton rightResetBtn = new JButton();
 		rightResetBtn.setBounds(390, 15, 60, 30);
-		URL rightResetUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_07.png");
+		URL rightResetUrl = BuyFrame.class.getClassLoader().getResource("buyButton_07.png");
 		rightResetBtn.setIcon(new ImageIcon(rightResetUrl));
 		rightPnl.add(rightResetBtn);
 
@@ -345,10 +357,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 		copyBtn[3].setBounds(375, 19, 75, 23);
 		copyBtn[4].setBounds(375, 21, 75, 23);
 
-		// 오른쪽 결제금액 텍스트 구현
-		JLabel rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
+		rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
 		rightBottomTextLbl.setFont(new Font("맑은 고딕", Font.BOLD, 18));
-		rightBottomTextLbl.setBounds(158, 388, 150, 50);
+		rightBottomTextLbl.setBounds(158, 388, 200, 50);
 		rightPnl.add(rightBottomTextLbl);
 
 //		----------------------------------------------------------------------------------
@@ -461,7 +472,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 		// 오른쪽 구매 버튼 구현
 		JButton rightBuyBtn = new JButton();
 		rightBuyBtn.setBounds(340, 390, 120, 50);
-		URL rightBuyUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_08.png");
+		URL rightBuyUrl = BuyFrame.class.getClassLoader().getResource("buyButton_08.png");
 		rightBuyBtn.setIcon(new ImageIcon(rightBuyUrl));
 		rightPnl.add(rightBuyBtn);
 
@@ -588,12 +599,12 @@ public class BuyFrame extends JFrame implements ActionListener {
 	}
 
 	public URL getBlackNumber(int i) {
-		URL url = BuyFrame.class.getClassLoader().getResource("resources/NumberBlack/" + (i + 1) + ".png");
+		URL url = BuyFrame.class.getClassLoader().getResource("NumberBlack/" + (i + 1) + ".png");
 		return url;
 	}
 
 	public URL getColorNumber(int i) {
-		URL url = BuyFrame.class.getClassLoader().getResource("resources/NumberColor/" + (i + 1) + ".png");
+		URL url = BuyFrame.class.getClassLoader().getResource("NumberColor/" + (i + 1) + ".png");
 		return url;
 	}
 
