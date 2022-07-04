@@ -41,6 +41,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 	private List<Integer> copyList;
 	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("resources/buyDefault.png");
 	private ImageIcon defaultBall = new ImageIcon(defaultBallImg);
+	private JLabel rightBottomTextLbl;
 
 	public Consumer getConsumer() {
 		return consumer;
@@ -75,6 +76,17 @@ public class BuyFrame extends JFrame implements ActionListener {
 		homeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int price = -(1000 * lottoList.size());
+				consumer.setPrice(price);
+				rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
+				for (int i = 0; i < rightLbl.length; i++) {
+					for (int j = 1; j < rightLbl[i].length; j++) {
+						rightLbl[i][j].setIcon(defaultBall);
+					}
+				}
+				lottoList.removeAll(lottoList);
+				pasteBtnFalse();
+				copyBtnReset();
 				dispose();
 			}
 		});
@@ -341,8 +353,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 		copyBtn[3].setBounds(375, 19, 75, 23);
 		copyBtn[4].setBounds(375, 21, 75, 23);
 
-		// 오른쪽 결제금액 텍스트 구현
-		JLabel rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
+		rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
 		rightBottomTextLbl.setFont(new Font("맑은 고딕", Font.BOLD, 18));
 		rightBottomTextLbl.setBounds(158, 388, 150, 50);
 		rightPnl.add(rightBottomTextLbl);
