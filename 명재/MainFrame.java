@@ -22,7 +22,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	public MainFrame() {
 		super("로또 추첨");
 		buyFrame = new BuyFrame();
-		
+		lotteryFrame = new LotteryFrame();
 
 		setSize(1000, 600);
 		setResizable(false);
@@ -114,6 +114,7 @@ public class MainFrame extends JFrame implements ActionListener {
 //			ToDo : 구매하기 버튼을 누르면 구매하기 창으로 이동
 			buyFrame.allInit();
 			buyFrame.setVisible(true);
+			System.out.println(lotteryFrame.getConsumer().getLottoList());
 			
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동

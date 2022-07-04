@@ -207,8 +207,13 @@ public class BuyFrame extends JFrame implements ActionListener {
 		purchaseCombo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int p = (purchaseCombo.getSelectedIndex() + 1) * 1000;
-				leftPriceLbl.setText("선택금액 : " + p + "원");
+				if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) {
+					JOptionPane.showMessageDialog(leftPnl, "한번에 5장 까지만 구매 가능합니다.");
+					purchaseCombo.setSelectedIndex(0);
+				} else {
+					int p = (purchaseCombo.getSelectedIndex() + 1) * 1000;
+					leftPriceLbl.setText("선택금액 : " + p + "원");
+				}
 			}
 		});
 
@@ -349,8 +354,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 		copyBtn[3].setBounds(375, 19, 75, 23);
 		copyBtn[4].setBounds(375, 21, 75, 23);
 
-		rightBottomTextLbl = new JLabel(
-				"결제금액 : " + consumer.getPrice() + "원(현재: " + 0 + "장)");
+		rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원(현재: " + 0 + "장)");
 		rightBottomTextLbl.setFont(new Font("맑은 고딕", Font.BOLD, 18));
 		rightBottomTextLbl.setBounds(50, 388, 300, 50);
 		rightPnl.add(rightBottomTextLbl);
@@ -641,8 +645,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 
 		int price = -(1000 * lottoList.size());
 		consumer.setPrice(price);
-		rightBottomTextLbl
-		.setText("결제금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
+		rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
 		for (int i = 0; i < rightLbl.length; i++) {
 			for (int j = 1; j < rightLbl[i].length; j++) {
 				rightLbl[i][j].setIcon(defaultBall);
