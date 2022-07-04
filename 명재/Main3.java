@@ -1,14 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,9 +10,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.FileImageInputStream;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -27,21 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.Timer;
-
-import org.omg.CORBA.Context;
-import org.omg.CORBA.ContextList;
-import org.omg.CORBA.DomainManager;
-import org.omg.CORBA.ExceptionList;
-import org.omg.CORBA.NVList;
-import org.omg.CORBA.NamedValue;
-import org.omg.CORBA.Object;
-import org.omg.CORBA.Policy;
-import org.omg.CORBA.Request;
-import org.omg.CORBA.SetOverrideType;
-import org.omg.PortableServer.AdapterActivator;
-import org.omg.PortableServer.POA;
-
+//import javax.swing.JScrollPane;
 import javax.swing.JButton;
 
 public class Main3 extends JFrame {
@@ -56,6 +32,7 @@ public class Main3 extends JFrame {
 	private Random random = new Random();
 	private boolean raffleEnd = false;
 	private List<List<Integer>> purchaseList = new ArrayList<>();
+//	private JScrollPane scroll = new JScrollPane();
 
 	public Main3() {
 		super("번호추첨");
@@ -156,6 +133,7 @@ public class Main3 extends JFrame {
 						bonusNumber = number;
 						bonus.setIcon(new ImageIcon(getBigColorNumber(listFortyFive.get(number))));
 						raffleEnd = true;
+						purchaseList.add(0, lottoList);
 					} else {
 
 //					ball[lottoList.size()].setText(String.valueOf(listFortyFive.get(number)));
@@ -186,6 +164,8 @@ public class Main3 extends JFrame {
 //			lblWin[0].setText("1  등    ");
 			pnlRight.add(ballPnl[i]);
 		}
+//		scroll.setViewportView(pnlRight);
+//		mainPnl.add(scroll);
 
 		URL me1ImgUrl = Main3.class.getClassLoader().getResource("resources/me1.png");
 		URL me2ImgUrl = Main3.class.getClassLoader().getResource("resources/me2.png");
@@ -213,7 +193,48 @@ public class Main3 extends JFrame {
 			public void mouseReleased(MouseEvent e) {
 				confirmClick.setIcon(new ImageIcon(me1ImgUrl));
 				for (int i = 0; i < Rball.length; i++) {
-					System.out.println(equalCounts(lottoList, purchaseList.get(i)));
+					switch (equalCounts(lottoList, purchaseList.get(i))) {
+					case 6:
+						lblWin[i].setText("1  등    ");
+						for (int j = 0; j < 6; j++) {
+							Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+						}
+						break;
+					case 5:
+						if (purchaseList.get(i).contains(bonusNumber)) {
+							lblWin[i].setText("2  등    ");
+							for (int j = 0; j < 6; j++) {
+								Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+							}
+						} else {
+							lblWin[i].setText("3  등    ");
+							for (int j = 0; j < 6; j++) {
+								if (lottoList.contains(purchaseList.get(i).get(j))) {
+									Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+								}
+							}
+						}
+						break;
+					case 4:
+						lblWin[i].setText("4  등    ");
+						for (int j = 0; j < 6; j++) {
+							if (lottoList.contains(purchaseList.get(i).get(j))) {
+								Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+							}
+						}
+						break;
+					case 3:
+						lblWin[i].setText("5 등    ");
+						for (int j = 0; j < 6; j++) {
+							if (lottoList.contains(purchaseList.get(i).get(j))) {
+								Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+							}
+						}
+						break;
+					default:
+						lblWin[i].setText("탈락    ");
+						break;
+					}
 
 				}
 			}
