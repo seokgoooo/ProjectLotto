@@ -58,7 +58,10 @@ public class LotteryFrame extends JFrame {
 		gifLbl.setBounds(45, 140, 460, 312);
 		gifLbl.setIcon(new ImageIcon(gif));
 		wrapPnl.add(gifLbl);
-// ---------------------------------------------------------------------------------------- 추첨버튼이랑 당첨확인버튼	
+// -----------------------------------------------------------------------------------------------------------
+//		추첨, 당첨확인 버튼
+// -----------------------------------------------------------------------------------------------------------
+//		추첨 버튼
 		JButton leftBtn = new JButton();
 		leftBtn.setBounds(163, 465, 210, 35);
 		leftBtn.setBorderPainted(false);
@@ -78,6 +81,7 @@ public class LotteryFrame extends JFrame {
 		});
 		wrapPnl.add(leftBtn);
 
+//		확인 버튼
 		JButton rightBtn = new JButton();
 		rightBtn.setBounds(650, 465, 210, 35);
 		rightBtn.setBorderPainted(false);
@@ -96,8 +100,11 @@ public class LotteryFrame extends JFrame {
 			}
 		});
 		wrapPnl.add(rightBtn);
+//--------------------------------------------------------------------------------------------------------
+//		왼쪽 부분 끝
 
-//-------------------------------------------------------------------------------------------------------- 오른쪽 부분		
+//		오른쪽 부분 시작
+//--------------------------------------------------------------------------------------------------------		
 		JPanel rightPnl = new JPanel(); // 오른쪽 패널
 		rightPnl.setBounds(509, 120, 455, 350);
 		BoxLayout box = new BoxLayout(rightPnl, BoxLayout.Y_AXIS);
@@ -109,45 +116,49 @@ public class LotteryFrame extends JFrame {
 		rightBallPnl.setBounds(0, 0, 453, 70);
 		rightBallPnl.setLayout(null);
 		rightPnl.add(rightBallPnl);
-
-//-----------------------------------------------------------------------------------------------추첨 확인쪽 공 만들기
-		// 선택 완료쪽 빈공
+//		추첨 확인쪽 공 만들기
+//		선택 완료쪽 빈공
 		URL smallBallUrl = LotteryFrame.class.getClassLoader().getResource("buyDefault.png");
 		for (int i = 0; i < rightSmallBall.length; i++) {
 			rightBasicBallPnl[i] = new JPanel();
+
 			textLbl[i] = new JLabel("A   ");
 			rightBasicBallPnl[i].add(textLbl[i]);
+
 			resultLbl[i] = new JLabel("1등    ");
 			rightBasicBallPnl[i].add(resultLbl[i]);
 
 			for (int j = 0; j < 6; j++) {
 				rightSmallBall[i][j] = new JCheckBox();
-				rightBasicBallPnl[i].add(rightSmallBall[i][j]);
 				rightSmallBall[i][j].setIcon(new ImageIcon(smallBallUrl));
+				rightBasicBallPnl[i].add(rightSmallBall[i][j]);
 			}
 			rightPnl.add(rightBasicBallPnl[i]);
 		}
+//--------------------------------------------------------------------------------------------------------
+//		오른쪽 부분 끝
 
-//------------------------------------------------------------------------------------------------ 메인 레이블 타이틀	
-
-		JLabel mainLbl = new JLabel("번호추첨");
-		mainLbl.setFont(new Font("휴먼엑스포", Font.BOLD, 45));
-		mainLbl.setBounds(0, 0, 994, 61);
-		mainLbl.setHorizontalAlignment(JLabel.CENTER);
-		mainLbl.setOpaque(true);
-		mainLbl.setForeground(Color.white);
-		mainLbl.setBackground(new Color(255, 192, 203));
+//		위쪽 부분 시작
+//--------------------------------------------------------------------------------------------------------		
+//		메인 레이블 타이틀	
+		JLabel titleLbl = new JLabel("번호추첨");
+		titleLbl.setFont(new Font("휴먼엑스포", Font.BOLD, 45));
+		titleLbl.setBounds(0, 0, 994, 61);
+		titleLbl.setHorizontalAlignment(JLabel.CENTER);
+		titleLbl.setOpaque(true);
+		titleLbl.setForeground(Color.white);
+		titleLbl.setBackground(new Color(255, 192, 203));
 		setFocusable(true);
-		add(mainLbl);
-// ----------------------------------------------------------------------------------------------------- 큰공 6개 넣는거
-		topBigBall = new JCheckBox[6]; // 추첨 공 6개
+		add(titleLbl);
+
+// 		큰공 6개 넣는거
+		topBigBall = new JCheckBox[6];
 		for (int i = 0; i < topBigBall.length; i++) {
 			topBigBall[i] = new JCheckBox();
 			topBigBall[i].setIcon(new ImageIcon(bigBallUrl));
 			topBallPnl.add(topBigBall[i]);
 		}
 // -----------------------------------------------------------------------------------------------------------
-
 		JButton homeBtn = new JButton();
 		homeBtn.addMouseListener(new MouseAdapter() {
 			@Override
@@ -169,7 +180,7 @@ public class LotteryFrame extends JFrame {
 		URL home = LotteryFrame.class.getClassLoader().getResource("homePink.png");
 		homeBtn.setIcon(new ImageIcon(home));
 		homeBtn.setBorderPainted(false);
-		mainLbl.add(homeBtn);
+		titleLbl.add(homeBtn);
 	}
 
 	public static void main(String[] args) {

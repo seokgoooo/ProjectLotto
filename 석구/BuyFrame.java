@@ -521,7 +521,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 					for (int j = 0; j < lottoList.get(index).size(); j++) {
 						rightLbl[index][j + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
 					}
-					System.out.println(lottoList);
 					numberBoxAllBlack(); // new
 					changeTrue = false; // 다시 수정 버튼을 누르기 전으로 돌아간다.
 				} else {
