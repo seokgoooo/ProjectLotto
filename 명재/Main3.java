@@ -27,7 +27,6 @@ import javax.swing.JButton;
 public class Main3 extends JFrame {
 	private JCheckBox[] ball;
 	private JCheckBox[][][] Rball;
-	private JPanel[] ballPnl = new JPanel[5];
 	private JLabel[][] lblA;
 	private JLabel[][] lblWin;
 	private List<Integer> listFortyFive = new ArrayList<>();
@@ -111,10 +110,10 @@ public class Main3 extends JFrame {
 		// 번호 추첨
 		JButton confirmClick = new JButton();
 		JButton btnClick = new JButton();
-		
+
 		btnClick.setBounds(163, 465, 210, 35);
 		mainPnl.add(btnClick);
-		
+
 		URL winImgUrl = Main3.class.getClassLoader().getResource("resources/win.png");
 		btnClick.setIcon(new ImageIcon(winImgUrl));
 		URL win3ImgUrl = Main3.class.getClassLoader().getResource("resources/win3.png");
@@ -163,7 +162,6 @@ public class Main3 extends JFrame {
 		JPanel[] cardPnl = new JPanel[index];
 		JPanel[] cardInPnl = new JPanel[5];
 		JPanel pnlEast = new JPanel();
-		
 
 		JButton btnPrev = new JButton("이전");
 		btnPrev.setFont(new Font("한컴 고딕", Font.BOLD, 13));
