@@ -17,12 +17,18 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton checkBtn;
 	private BuyFrame buy;
 	private LotteryFrame lottery;
+	private HistoryFrame history;
 	private Consumer consumer = new Consumer();
+
+	public Consumer getConsumer() {
+		return consumer;
+	}
 
 	public MainFrame() {
 		super("로또 추첨");
 		buy = new BuyFrame();
 		lottery = new LotteryFrame();
+		history = new HistoryFrame();
 		setSize(1000, 600);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -116,11 +122,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
 			consumer = buy.getConsumer(); // 저장된 값 불러오기
-			System.out.println(consumer.getList());
+			lottery.setConsumer(consumer);
+			System.out.println(lottery.getConsumer().getLottoList());
+			buyBtn.setEnabled(false);
 			lottery.setVisible(true);
 		} else if (click == historyBtn) {
 //			ToDo : 역대당첨번호 버튼을 누르면 역대당첨번호 창으로 이동
-
+			history.setVisible(true);
 		} else if (click == checkBtn) {
 //			ToDo : 당첨확인 버튼을 누르면 당첨확인 창으로 이동
 

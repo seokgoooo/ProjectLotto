@@ -387,31 +387,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		// 오른쪽 수정 버튼 이벤트
-		ActionListener changeListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (int i = 0; i < changeBtn.length; i++) {
-					if (e.getSource() == changeBtn[i]) {
-						changeTrue = true;
-						manualRBtn.setSelected(true);
-						lottoSet.removeAll(lottoSet);
-						ballAllUnSelected();
-						ballAllReset();
-						for (int j = 0; j < lottoList.get(i).size(); j++) {
-							lottoSet.add(lottoList.get(i).get(j));
-							numberBox[lottoList.get(i).get(j) - 1].setEnabled(true);
-							numberBox[lottoList.get(i).get(j) - 1].setSelected(true);
-							numberBox[lottoList.get(i).get(j) - 1]
-									.setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1))); // new
-						}
-						index = i;
-						copyBtnReset();
-					}
-				}
-			}
-		};
-
 		// 오른쪽 삭제 버튼 이벤트
 		ActionListener removeListener = new ActionListener() {
 			@Override
@@ -441,6 +416,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (int i = 0; i < copyBtn.length; i++) {
+					changeBtn[i].setEnabled(false);
+					deleteBtn[i].setEnabled(false);
+					copyBtn[i].setEnabled(false);
 					if (e.getSource() == copyBtn[i]) {
 						copyList = new ArrayList<>(lottoList.get(i));
 						copyBtn[lottoList.size()].setVisible(false);
@@ -454,7 +432,13 @@ public class BuyFrame extends JFrame implements ActionListener {
 		ActionListener pasteListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < lottoList.size(); i++) {
+					changeBtn[i].setEnabled(true);
+					deleteBtn[i].setEnabled(true);
+					copyBtn[i].setEnabled(true);
+				}
 				for (int i = 0; i < pasteBtn.length; i++) {
+
 					if (e.getSource() == pasteBtn[i]) {
 						lottoList.add(copyList);
 						for (int j = 0; j < copyList.size(); j++) {
@@ -497,12 +481,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		for (int i = 0; i < changeBtn.length; i++) {
-			changeBtn[i].addActionListener(changeListener);
-			deleteBtn[i].addActionListener(removeListener);
-			copyBtn[i].addActionListener(copyListener);
-			pasteBtn[i].addActionListener(pasteListener);
-		}
 //		-----------------------------------------------------------------------------------------
 //		오른쪽 (구매확인) Frame 끝
 //		-----------------------------------------------------------------------------------------
@@ -511,18 +489,33 @@ public class BuyFrame extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (changeTrue) {
-					lottoList.remove(lottoList.get(index)); // index에 해당하는 배열을 지운다.
-					List<Integer> list = new ArrayList<Integer>(lottoSet); // 새로 수정한 lotto set을 list로 만든다.
-					Collections.sort(list); // 정렬
-					lottoList.add(index, list); // 삭제한 index에 정렬한 list를 추가한다.
-					ballAllReset(); // checkbox를 모두 초기화 시킨다.
-					ballAllSelected(); // checkbox를 모두 활성화 시킨다.
-					lottoSet.removeAll(lottoSet); // set을 지워준다.
-					for (int j = 0; j < lottoList.get(index).size(); j++) {
-						rightLbl[index][j + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
+					if (lottoSet.size() < 6) {
+						JOptionPane.showMessageDialog(BuyFrame.this, "번호 6개를 선택해 주세요");
+					} else {
+						lottoList.remove(lottoList.get(index)); // index에 해당하는 배열을 지운다.
+						List<Integer> list = new ArrayList<Integer>(lottoSet); // 새로 수정한 lotto set을 list로 만든다.
+						Collections.sort(list); // 정렬
+						lottoList.add(index, list); // 삭제한 index에 정렬한 list를 추가한다.
+						ballAllReset(); // checkbox를 모두 초기화 시킨다.
+						ballAllSelected(); // checkbox를 모두 활성화 시킨다.
+						lottoSet.removeAll(lottoSet); // set을 지워준다.
+						for (int j = 0; j < lottoList.get(index).size(); j++) {
+							rightLbl[index][j + 1]
+									.setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
+						}
+						numberBoxAllBlack(); // new
+						semiAutoRBtn.setEnabled(true);
+						autoRBtn.setEnabled(true);
+						purchaseCombo.setEnabled(true);
+						rightResetBtn.setEnabled(true);
+						rightBuyBtn.setEnabled(true);
+						for (int i = 0; i < lottoList.size(); i++) {
+							changeBtn[i].setEnabled(true);
+							deleteBtn[i].setEnabled(true);
+							copyBtn[i].setEnabled(true);
+						}
+						changeTrue = false; // 다시 수정 버튼을 누르기 전으로 돌아간다.
 					}
-					numberBoxAllBlack(); // new
-					changeTrue = false; // 다시 수정 버튼을 누르기 전으로 돌아간다.
 				} else {
 					if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) { // 5장 넘게 구매X
 						JOptionPane.showMessageDialog(BuyFrame.this, "복권은 한번에 5장까지 구매 가능합니다.");
@@ -591,12 +584,53 @@ public class BuyFrame extends JFrame implements ActionListener {
 						}
 						rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
 						purchaseCombo.setSelectedIndex(0);
-//						System.out.println(lottoList);
 						numberBoxAllBlack();
 					}
 				}
 			}
 		});
+
+		// 오른쪽 수정 버튼 이벤트
+		ActionListener changeListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < changeBtn.length; i++) {
+					changeBtn[i].setEnabled(false);
+					deleteBtn[i].setEnabled(false);
+					copyBtn[i].setEnabled(false);
+					if (e.getSource() == changeBtn[i]) {
+						changeTrue = true;
+						manualRBtn.setSelected(true);
+						semiAutoRBtn.setEnabled(false);
+						autoRBtn.setEnabled(false);
+						purchaseCombo.setEnabled(false);
+						rightResetBtn.setEnabled(false);
+						rightBuyBtn.setEnabled(false);
+
+						lottoSet.removeAll(lottoSet);
+						ballAllUnSelected();
+						ballAllReset();
+						for (int j = 0; j < lottoList.get(i).size(); j++) {
+							lottoSet.add(lottoList.get(i).get(j));
+							numberBox[lottoList.get(i).get(j) - 1].setEnabled(true);
+							numberBox[lottoList.get(i).get(j) - 1].setSelected(true);
+							numberBox[lottoList.get(i).get(j) - 1]
+									.setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1))); // new
+
+						}
+						index = i;
+						copyBtnReset();
+					}
+				}
+			}
+		};
+
+		for (int i = 0; i < changeBtn.length; i++) {
+			changeBtn[i].addActionListener(changeListener);
+			deleteBtn[i].addActionListener(removeListener);
+			copyBtn[i].addActionListener(copyListener);
+			pasteBtn[i].addActionListener(pasteListener);
+		}
 	}
 
 	public URL getBlackNumber(int i) {
