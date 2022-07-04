@@ -41,6 +41,15 @@ public class BuyFrame extends JFrame implements ActionListener {
 	private List<Integer> copyList;
 	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("resources/buyDefault.png");
 	private ImageIcon defaultBall = new ImageIcon(defaultBallImg);
+	private JLabel rightBottomTextLbl;
+
+	public Consumer getConsumer() {
+		return consumer;
+	}
+
+	public void setConsumer(Consumer consumer) {
+		this.consumer = consumer;
+	}
 
 	public Consumer getConsumer() {
 		return consumer;
@@ -75,6 +84,17 @@ public class BuyFrame extends JFrame implements ActionListener {
 		homeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int price = -(1000 * lottoList.size());
+				consumer.setPrice(price);
+				rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
+				for (int i = 0; i < rightLbl.length; i++) {
+					for (int j = 1; j < rightLbl[i].length; j++) {
+						rightLbl[i][j].setIcon(defaultBall);
+					}
+				}
+				lottoList.removeAll(lottoList);
+				pasteBtnFalse();
+				copyBtnReset();
 				dispose();
 			}
 		});
@@ -341,8 +361,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 		copyBtn[3].setBounds(375, 19, 75, 23);
 		copyBtn[4].setBounds(375, 21, 75, 23);
 
-		// 오른쪽 결제금액 텍스트 구현
-		JLabel rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
+		rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
 		rightBottomTextLbl.setFont(new Font("맑은 고딕", Font.BOLD, 18));
 		rightBottomTextLbl.setBounds(158, 388, 150, 50);
 		rightPnl.add(rightBottomTextLbl);
@@ -385,7 +404,12 @@ public class BuyFrame extends JFrame implements ActionListener {
 							lottoSet.add(lottoList.get(i).get(j));
 							numberBox[lottoList.get(i).get(j) - 1].setEnabled(true);
 							numberBox[lottoList.get(i).get(j) - 1].setSelected(true);
+<<<<<<< HEAD
 							numberBox[lottoList.get(i).get(j) - 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1))); // new
+=======
+							numberBox[lottoList.get(i).get(j) - 1]
+									.setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1))); // new
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectLotto.git
 						}
 						index = i;
 						copyBtnReset();
@@ -504,7 +528,11 @@ public class BuyFrame extends JFrame implements ActionListener {
 						rightLbl[index][j + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
 					}
 					System.out.println(lottoList);
+<<<<<<< HEAD
 					numberBoxAllBlack(); // new 
+=======
+					numberBoxAllBlack(); // new
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectLotto.git
 					changeTrue = false; // 다시 수정 버튼을 누르기 전으로 돌아간다.
 				} else {
 					if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) { // 5장 넘게 구매X
@@ -554,7 +582,11 @@ public class BuyFrame extends JFrame implements ActionListener {
 								lottoList.add(list);
 								ballAllReset();
 								lottoSet.removeAll(lottoSet); // set을 초기화
+<<<<<<< HEAD
 								
+=======
+
+>>>>>>> branch 'main' of https://github.com/seokgoooo/ProjectLotto.git
 							}
 							consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 						}
@@ -620,6 +652,13 @@ public class BuyFrame extends JFrame implements ActionListener {
 	// numberBox를 모두 검은색으로  new
 	public void numberBoxAllBlack() {
 		for(int i = 0; i < numberBox.length;i++) {
+			numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
+		}
+	}
+
+	// numberBox를 모두 검은색으로 new
+	public void numberBoxAllBlack() {
+		for (int i = 0; i < numberBox.length; i++) {
 			numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
 		}
 	}

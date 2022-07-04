@@ -16,6 +16,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton historyBtn;
 	private JButton checkBtn;
 	private BuyFrame buyFrame;
+	private Consumer consumer = new Consumer();
 
 	public MainFrame() {
 		super("로또 추첨");
@@ -62,7 +63,7 @@ public class MainFrame extends JFrame implements ActionListener {
 //		프로그램 실행시키는데 있어서 시간소요가 많이 되어 이 작업을 없애고
 //		이미지 자체 해상도를 줄이는 방법으로 해결
 
-//		ImageIcon mainImageIcon = new ImageIcon("resources/main_01.png");
+//		ImageIcon mainImageIcon = new ImageIcon("main_01.png");
 //		Image mainImage = mainImageIcon.getImage().getScaledInstance(1000, 350, Image.SCALE_SMOOTH);
 //		ImageIcon changeMainIcon = new ImageIcon(mainImage);
 //		mainImageLabel.setIcon(changeMainIcon);
@@ -110,15 +111,17 @@ public class MainFrame extends JFrame implements ActionListener {
 		if (click == buyBtn) {
 //			ToDo : 구매하기 버튼을 누르면 구매하기 창으로 이동
 			buyFrame.setVisible(true);
+
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
-lotteryFrame.setVisible(true);
+			consumer = buyFrame.getConsumer(); // 저장된 값 불러오기
+			System.out.println(consumer.getList());
 		} else if (click == historyBtn) {
 //			ToDo : 역대당첨번호 버튼을 누르면 역대당첨번호 창으로 이동
 
 		} else if (click == checkBtn) {
 //			ToDo : 당첨확인 버튼을 누르면 당첨확인 창으로 이동
-// 얘는 lotteryFrame 으로 합체
+
 		}
 	}
 
