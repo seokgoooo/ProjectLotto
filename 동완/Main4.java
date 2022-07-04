@@ -24,6 +24,7 @@ public class Main4 extends JFrame {
 	private JLabel[] bonus1 = new JLabel[5];
 	private JCheckBox[] bonusBall = new JCheckBox[5];
 	
+	
 	private JCheckBox[][] Rball2 = new JCheckBox[5][6];
 	private JPanel[] ballPnl2 = new JPanel[5];
 	private JLabel[] lblA2 = new JLabel[5];
