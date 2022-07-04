@@ -42,6 +42,13 @@ public class BuyFrame extends JFrame implements ActionListener {
 	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("resources/buyDefault.png");
 	private ImageIcon defaultBall = new ImageIcon(defaultBallImg);
 	private JLabel rightBottomTextLbl;
+	private JButton rightBuyBtn;
+	private JButton rightResetBtn;
+	private JRadioButton autoRBtn;
+	private JRadioButton semiAutoRBtn;
+	private JRadioButton manualRBtn;
+	private List<List<Integer>> lottoList;
+	private JComboBox<Integer> purchaseCombo;
 
 	public Consumer getConsumer() {
 		return consumer;
@@ -53,9 +60,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 
 	public BuyFrame() {
 		super("로또 구매");
-		System.out.println(BuyFrame.class.getClassLoader());
-		List<List<Integer>> lottoList = new ArrayList<>();
-
+		lottoList = new ArrayList<>();
+		System.out.println(lottoList);
 		setSize(1000, 600);
 		setBackground(Color.white);
 		setResizable(false);
@@ -71,29 +77,12 @@ public class BuyFrame extends JFrame implements ActionListener {
 		homeBtn.setBounds(30, 15, 50, 50);
 		URL homeBtnUrl = BuyFrame.class.getClassLoader().getResource("resources/homeBlack.png");
 		homeBtn.setIcon(new ImageIcon(homeBtnUrl));
+		homeBtn.setBorderPainted(false);
 		wrapPnl.add(homeBtn);
-
-		homeBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int price = -(1000 * lottoList.size());
-				consumer.setPrice(price);
-				rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
-				for (int i = 0; i < rightLbl.length; i++) {
-					for (int j = 1; j < rightLbl[i].length; j++) {
-						rightLbl[i][j].setIcon(defaultBall);
-					}
-				}
-				lottoList.removeAll(lottoList);
-				pasteBtnFalse();
-				copyBtnReset();
-				dispose();
-			}
-		});
 
 		JLabel titleImgLbl = new JLabel();
 		titleImgLbl.setBounds(0, 0, 1000, 75);
-		URL titleImgUrl = BuyFrame.class.getClassLoader().getResource("resources/title.png");
+		URL titleImgUrl = BuyFrame.class.getClassLoader().getResource("resources/buyTitle.png");
 		titleImgLbl.setIcon(new ImageIcon(titleImgUrl));
 		wrapPnl.add(titleImgLbl);
 
@@ -108,18 +97,14 @@ public class BuyFrame extends JFrame implements ActionListener {
 		rightPnl.setLayout(null);
 		wrapPnl.add(rightPnl);
 
-		// 배경화면 image 적용
-		JLabel mainBgLbl = new JLabel();
-		mainBgLbl.setBounds(0, 0, 995, 580);
-		URL url = BuyFrame.class.getClassLoader().getResource("resources/back_01.png");
-		mainBgLbl.setIcon(new ImageIcon(url));
-		wrapPnl.add(mainBgLbl);
 //		-----------------------------------------------------------------------------------------
 //		왼쪽 (구매) Frame 시작
 //		왼쪽 라디오 버튼들 (수동, 혼합, 자동) 구현 / 동작
 //		-----------------------------------------------------------------------------------------
+
 		// 수동선택 라디오 버튼
-		JRadioButton manualRBtn = new JRadioButton();
+
+		manualRBtn = new JRadioButton();
 		manualRBtn.setBounds(45, 115, 138, 136);
 		URL manualUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_01.png");
 		manualRBtn.setIcon(new ImageIcon(manualUrl));
@@ -128,8 +113,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 		manualRBtn.setSelected(true);
 		wrapPnl.add(manualRBtn);
 
-		// 혼합선택 라디오 버튼
-		JRadioButton semiAutoRBtn = new JRadioButton();
+		semiAutoRBtn = new JRadioButton();
 		semiAutoRBtn.setBounds(45, 263, 138, 136);
 		URL semiAutoUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_02.png");
 		semiAutoRBtn.setIcon(new ImageIcon(semiAutoUrl));
@@ -137,13 +121,13 @@ public class BuyFrame extends JFrame implements ActionListener {
 		semiAutoRBtn.setSelectedIcon(new ImageIcon(semiAutoSUrl));
 		wrapPnl.add(semiAutoRBtn);
 
-		// 자동선택 라디오 버튼
-		JRadioButton autoRBtn = new JRadioButton();
+		autoRBtn = new JRadioButton();
 		autoRBtn.setBounds(45, 411, 138, 136);
 		URL autoUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_03.png");
 		autoRBtn.setIcon(new ImageIcon(autoUrl));
 		URL autoSUrl = BuyFrame.class.getClassLoader().getResource("resources/selectedBuyButton_03.png");
 		autoRBtn.setSelectedIcon(new ImageIcon(autoSUrl));
+
 		wrapPnl.add(autoRBtn);
 
 		// 라디오 버튼 그룹
@@ -166,6 +150,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				ballAllSelected();
 				ballAllReset();
+				numberBoxAllBlack(); // new
 				lottoSet.removeAll(lottoSet);
 			}
 		});
@@ -178,42 +163,11 @@ public class BuyFrame extends JFrame implements ActionListener {
 				lottoSet.removeAll(lottoSet);
 			}
 		});
-//		-----------------------------------------------------------------------------------------
-//		1 ~ 45 번호 image 구현
-//		-----------------------------------------------------------------------------------------
-		// 왼쪽 번호 부분 배치와 정렬
-		GridLayout grid = new GridLayout(9, 5);
-		leftPnl.setLayout(grid); // 패널안에서 정렬
 
-		// default 값으로 흑백 번호 image 를 담을 배열
-		numberBox = new JCheckBox[45];
-		for (int i = 0; i < numberBox.length; i++) {
-			numberBox[i] = new JCheckBox();
-			numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
-			numberBox[i].addActionListener(this);
-			leftPnl.add(numberBox[i]);
-		}
-//		-----------------------------------------------------------------------------------------
-//		1 ~ 45 번호 image 부분 끝
-//		번호 image 아래 콤보박스 확인 초기화 버튼 구현 / 동작
-//		-----------------------------------------------------------------------------------------
 		// 수량 정하는 콤보박스
-		JComboBox<Integer> purchaseCombo = new JComboBox<>(comboNumber);
+		purchaseCombo = new JComboBox<>(comboNumber);
 		purchaseCombo.setBounds(317, 524, 50, 25);
 		wrapPnl.add(purchaseCombo);
-
-		JLabel leftPriceLbl = new JLabel("선택금액 : " + 1000 + "원");
-		leftPriceLbl.setBounds(250, 100, 200, 50);
-		leftPriceLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-		wrapPnl.add(leftPriceLbl);
-
-		purchaseCombo.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int p = (purchaseCombo.getSelectedIndex() + 1) * 1000;
-				leftPriceLbl.setText("선택금액 : " + p + "원");
-			}
-		});
 
 		// 왼쪽 확인 버튼
 		JButton leftCheckBtn = new JButton();
@@ -242,6 +196,48 @@ public class BuyFrame extends JFrame implements ActionListener {
 				lottoSet.removeAll(lottoSet);
 			}
 		});
+
+		JLabel leftPriceLbl = new JLabel("선택금액 : " + 1000 + "원");
+		leftPriceLbl.setBounds(240, 100, 200, 50);
+		leftPriceLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
+		leftPriceLbl.setBackground(Color.DARK_GRAY);
+		leftPriceLbl.setHorizontalAlignment(JLabel.CENTER);
+		wrapPnl.add(leftPriceLbl);
+
+		purchaseCombo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int p = (purchaseCombo.getSelectedIndex() + 1) * 1000;
+				leftPriceLbl.setText("선택금액 : " + p + "원");
+			}
+		});
+
+		// 배경화면 image 적용
+		JLabel mainBgLbl = new JLabel();
+		mainBgLbl.setBounds(0, 0, 995, 580);
+		URL url = BuyFrame.class.getClassLoader().getResource("resources/back_01.png");
+		mainBgLbl.setIcon(new ImageIcon(url));
+		wrapPnl.add(mainBgLbl);
+//		-----------------------------------------------------------------------------------------
+//		1 ~ 45 번호 image 구현
+//		-----------------------------------------------------------------------------------------
+		// 왼쪽 번호 부분 배치와 정렬
+		GridLayout grid = new GridLayout(9, 5);
+		leftPnl.setLayout(grid); // 패널안에서 정렬
+
+		// default 값으로 흑백 번호 image 를 담을 배열
+		numberBox = new JCheckBox[45];
+		for (int i = 0; i < numberBox.length; i++) {
+			numberBox[i] = new JCheckBox();
+			numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
+			numberBox[i].addActionListener(this);
+			leftPnl.add(numberBox[i]);
+		}
+//		-----------------------------------------------------------------------------------------
+//		1 ~ 45 번호 image 부분 끝
+//		번호 image 아래 콤보박스 확인 초기화 버튼 구현 / 동작
+//		-----------------------------------------------------------------------------------------
+
 //		-----------------------------------------------------------------------------------------
 //		왼쪽 (구매) Frame 끝
 
@@ -259,9 +255,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 		rightTopTextLbl.setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 14));
 		rightPnl.add(rightTopTextLbl);
 
-		JButton rightResetBtn = new JButton();
+		rightResetBtn = new JButton();
 		rightResetBtn.setBounds(390, 15, 60, 30);
-		URL rightResetUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_07.png");
+		URL rightResetUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_06.png");
 		rightResetBtn.setIcon(new ImageIcon(rightResetUrl));
 		rightPnl.add(rightResetBtn);
 
@@ -353,9 +349,10 @@ public class BuyFrame extends JFrame implements ActionListener {
 		copyBtn[3].setBounds(375, 19, 75, 23);
 		copyBtn[4].setBounds(375, 21, 75, 23);
 
-		rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
+		rightBottomTextLbl = new JLabel(
+				"결제금액 : " + consumer.getPrice() + "원(현재: " + 0 + "장)");
 		rightBottomTextLbl.setFont(new Font("맑은 고딕", Font.BOLD, 18));
-		rightBottomTextLbl.setBounds(158, 388, 150, 50);
+		rightBottomTextLbl.setBounds(50, 388, 300, 50);
 		rightPnl.add(rightBottomTextLbl);
 
 //		----------------------------------------------------------------------------------
@@ -369,7 +366,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				int price = -(1000 * lottoList.size());
 				consumer.setPrice(price);
-				rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
+				rightBottomTextLbl
+						.setText("결제금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
 				for (int i = 0; i < rightLbl.length; i++) {
 					for (int j = 1; j < rightLbl[i].length; j++) {
 						rightLbl[i][j].setIcon(defaultBall);
@@ -380,30 +378,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 				copyBtnReset();
 			}
 		});
-
-		// 오른쪽 수정 버튼 이벤트
-		ActionListener changeListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (int i = 0; i < changeBtn.length; i++) {
-					if (e.getSource() == changeBtn[i]) {
-						changeTrue = true;
-						manualRBtn.setSelected(true);
-						lottoSet.removeAll(lottoSet);
-						ballAllUnSelected();
-						ballAllReset();
-						for (int j = 0; j < lottoList.get(i).size(); j++) {
-							lottoSet.add(lottoList.get(i).get(j));
-							numberBox[lottoList.get(i).get(j) - 1].setEnabled(true);
-							numberBox[lottoList.get(i).get(j) - 1].setSelected(true);
-							numberBox[lottoList.get(i).get(j) - 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1))); // new
-						}
-						index = i;
-						copyBtnReset();
-					}
-				}
-			}
-		};
 
 		// 오른쪽 삭제 버튼 이벤트
 		ActionListener removeListener = new ActionListener() {
@@ -422,7 +396,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 							}
 						}
 						consumer.setPrice(-1000);
-						rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
+						rightBottomTextLbl.setText(
+								"결제금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
 						ballAllReset();
 					}
 				}
@@ -434,6 +409,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (int i = 0; i < copyBtn.length; i++) {
+					changeBtn[i].setEnabled(false);
+					deleteBtn[i].setEnabled(false);
+					copyBtn[i].setEnabled(false);
 					if (e.getSource() == copyBtn[i]) {
 						copyList = new ArrayList<>(lottoList.get(i));
 						copyBtn[lottoList.size()].setVisible(false);
@@ -447,14 +425,21 @@ public class BuyFrame extends JFrame implements ActionListener {
 		ActionListener pasteListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < lottoList.size(); i++) {
+					changeBtn[i].setEnabled(true);
+					deleteBtn[i].setEnabled(true);
+					copyBtn[i].setEnabled(true);
+				}
 				for (int i = 0; i < pasteBtn.length; i++) {
+
 					if (e.getSource() == pasteBtn[i]) {
 						lottoList.add(copyList);
 						for (int j = 0; j < copyList.size(); j++) {
 							rightLbl[i][j + 1].setIcon(new ImageIcon(getColorNumber(copyList.get(j) - 1))); // new
 						}
 						consumer.setPrice(1000);
-						rightBottomTextLbl.setText("총 금액: " + consumer.getPrice() + "원");
+						rightBottomTextLbl.setText(
+								"총 금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
 						changeBtn[lottoList.size() - 1].setEnabled(true);
 						deleteBtn[lottoList.size() - 1].setEnabled(true);
 						copyBtn[lottoList.size() - 1].setEnabled(true);
@@ -464,10 +449,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 			}
 		};
 
-		// 오른쪽 구매 버튼 구현
-		JButton rightBuyBtn = new JButton();
+		rightBuyBtn = new JButton();
 		rightBuyBtn.setBounds(340, 390, 120, 50);
-		URL rightBuyUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_08.png");
+		URL rightBuyUrl = BuyFrame.class.getClassLoader().getResource("resources/buyButton_07.png");
 		rightBuyBtn.setIcon(new ImageIcon(rightBuyUrl));
 		rightPnl.add(rightBuyBtn);
 
@@ -490,12 +474,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 			}
 		});
 
-		for (int i = 0; i < changeBtn.length; i++) {
-			changeBtn[i].addActionListener(changeListener);
-			deleteBtn[i].addActionListener(removeListener);
-			copyBtn[i].addActionListener(copyListener);
-			pasteBtn[i].addActionListener(pasteListener);
-		}
 //		-----------------------------------------------------------------------------------------
 //		오른쪽 (구매확인) Frame 끝
 //		-----------------------------------------------------------------------------------------
@@ -504,19 +482,33 @@ public class BuyFrame extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (changeTrue) {
-					lottoList.remove(lottoList.get(index)); // index에 해당하는 배열을 지운다.
-					List<Integer> list = new ArrayList<Integer>(lottoSet); // 새로 수정한 lotto set을 list로 만든다.
-					Collections.sort(list); // 정렬
-					lottoList.add(index, list); // 삭제한 index에 정렬한 list를 추가한다.
-					ballAllReset(); // checkbox를 모두 초기화 시킨다.
-					ballAllSelected(); // checkbox를 모두 활성화 시킨다.
-					lottoSet.removeAll(lottoSet); // set을 지워준다.
-					for (int j = 0; j < lottoList.get(index).size(); j++) {
-						rightLbl[index][j + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
+					if (lottoSet.size() < 6) {
+						JOptionPane.showMessageDialog(BuyFrame.this, "번호 6개를 선택해 주세요");
+					} else {
+						lottoList.remove(lottoList.get(index)); // index에 해당하는 배열을 지운다.
+						List<Integer> list = new ArrayList<Integer>(lottoSet); // 새로 수정한 lotto set을 list로 만든다.
+						Collections.sort(list); // 정렬
+						lottoList.add(index, list); // 삭제한 index에 정렬한 list를 추가한다.
+						ballAllReset(); // checkbox를 모두 초기화 시킨다.
+						ballAllSelected(); // checkbox를 모두 활성화 시킨다.
+						lottoSet.removeAll(lottoSet); // set을 지워준다.
+						for (int j = 0; j < lottoList.get(index).size(); j++) {
+							rightLbl[index][j + 1]
+									.setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
+						}
+						numberBoxAllBlack(); // new
+						semiAutoRBtn.setEnabled(true);
+						autoRBtn.setEnabled(true);
+						purchaseCombo.setEnabled(true);
+						rightResetBtn.setEnabled(true);
+						rightBuyBtn.setEnabled(true);
+						for (int i = 0; i < lottoList.size(); i++) {
+							changeBtn[i].setEnabled(true);
+							deleteBtn[i].setEnabled(true);
+							copyBtn[i].setEnabled(true);
+						}
+						changeTrue = false; // 다시 수정 버튼을 누르기 전으로 돌아간다.
 					}
-					System.out.println(lottoList);
-					numberBoxAllBlack(); // new 
-					changeTrue = false; // 다시 수정 버튼을 누르기 전으로 돌아간다.
 				} else {
 					if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) { // 5장 넘게 구매X
 						JOptionPane.showMessageDialog(BuyFrame.this, "복권은 한번에 5장까지 구매 가능합니다.");
@@ -565,7 +557,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 								lottoList.add(list);
 								ballAllReset();
 								lottoSet.removeAll(lottoSet); // set을 초기화
-								
+
 							}
 							consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 						}
@@ -583,14 +575,93 @@ public class BuyFrame extends JFrame implements ActionListener {
 						} else {
 							ballAllSelected();
 						}
-						rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
+						rightBottomTextLbl.setText(
+								"결제금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
 						purchaseCombo.setSelectedIndex(0);
-//						System.out.println(lottoList);
 						numberBoxAllBlack();
 					}
 				}
 			}
 		});
+
+		// 오른쪽 수정 버튼 이벤트
+		ActionListener changeListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0; i < changeBtn.length; i++) {
+					changeBtn[i].setEnabled(false);
+					deleteBtn[i].setEnabled(false);
+					copyBtn[i].setEnabled(false);
+					if (e.getSource() == changeBtn[i]) {
+						changeTrue = true;
+						manualRBtn.setSelected(true);
+						semiAutoRBtn.setEnabled(false);
+						autoRBtn.setEnabled(false);
+						purchaseCombo.setEnabled(false);
+						rightResetBtn.setEnabled(false);
+						rightBuyBtn.setEnabled(false);
+
+						lottoSet.removeAll(lottoSet);
+						ballAllUnSelected();
+						ballAllReset();
+						for (int j = 0; j < lottoList.get(i).size(); j++) {
+							lottoSet.add(lottoList.get(i).get(j));
+							numberBox[lottoList.get(i).get(j) - 1].setEnabled(true);
+							numberBox[lottoList.get(i).get(j) - 1].setSelected(true);
+							numberBox[lottoList.get(i).get(j) - 1]
+									.setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1))); // new
+
+						}
+						index = i;
+						copyBtnReset();
+					}
+				}
+			}
+		};
+
+		for (int i = 0; i < changeBtn.length; i++) {
+			changeBtn[i].addActionListener(changeListener);
+			deleteBtn[i].addActionListener(removeListener);
+			copyBtn[i].addActionListener(copyListener);
+			pasteBtn[i].addActionListener(pasteListener);
+		}
+
+		// 홈버튼
+		homeBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				dispose();
+			}
+		});
+	}
+
+	// 모든걸 초기화
+	public void allInit() {
+
+		int price = -(1000 * lottoList.size());
+		consumer.setPrice(price);
+		rightBottomTextLbl
+		.setText("결제금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
+		for (int i = 0; i < rightLbl.length; i++) {
+			for (int j = 1; j < rightLbl[i].length; j++) {
+				rightLbl[i][j].setIcon(defaultBall);
+			}
+		}
+		lottoList.removeAll(lottoList);
+		lottoSet.removeAll(lottoSet);
+		ballAllReset();
+		ballAllSelected();
+		numberBoxAllBlack();
+		pasteBtnFalse();
+		copyBtnReset();
+		purchaseCombo.setEnabled(true);
+		rightResetBtn.setEnabled(true);
+		semiAutoRBtn.setEnabled(true);
+		autoRBtn.setEnabled(true);
+		manualRBtn.setSelected(true);
+		rightBuyBtn.setEnabled(true);
+		changeTrue = false;
 	}
 
 	public URL getBlackNumber(int i) {
@@ -611,6 +682,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 				if (numberBox[i].isSelected()) {
 					numberBox[i].setIcon(new ImageIcon(getColorNumber(i)));
 					lottoSet.add(i + 1);
+					System.out.println(lottoSet);
 				} else {
 					numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
 					lottoSet.remove(i + 1);
@@ -627,10 +699,10 @@ public class BuyFrame extends JFrame implements ActionListener {
 			ballAllSelected();
 		}
 	}
-	
-	// numberBox를 모두 검은색으로  new
+
+	// numberBox를 모두 검은색으로 new
 	public void numberBoxAllBlack() {
-		for(int i = 0; i < numberBox.length;i++) {
+		for (int i = 0; i < numberBox.length; i++) {
 			numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
 		}
 	}

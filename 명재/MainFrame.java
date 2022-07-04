@@ -16,7 +16,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton historyBtn;
 	private JButton checkBtn;
 	private BuyFrame buyFrame;
-	private Consumer consumer = new Consumer();
 
 	public MainFrame() {
 		super("로또 추첨");
@@ -110,12 +109,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		Object click = e.getSource();
 		if (click == buyBtn) {
 //			ToDo : 구매하기 버튼을 누르면 구매하기 창으로 이동
+			buyFrame.allInit();
 			buyFrame.setVisible(true);
-			
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
-			consumer = buyFrame.getConsumer(); // 저장된 값 불러오기 
-			System.out.println(consumer.getList());
+
 		} else if (click == historyBtn) {
 //			ToDo : 역대당첨번호 버튼을 누르면 역대당첨번호 창으로 이동
 
