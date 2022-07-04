@@ -41,6 +41,15 @@ public class BuyFrame extends JFrame implements ActionListener {
 	private List<Integer> copyList;
 	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("buyDefault.png");
 	private ImageIcon defaultBall = new ImageIcon(defaultBallImg);
+	private JLabel rightBottomTextLbl;
+
+	public Consumer getConsumer() {
+		return consumer;
+	}
+
+	public void setConsumer(Consumer consumer) {
+		this.consumer = consumer;
+	}
 
 	public BuyFrame() {
 		super("로또 구매");
@@ -66,6 +75,17 @@ public class BuyFrame extends JFrame implements ActionListener {
 		homeBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int price = -(1000 * lottoList.size());
+				consumer.setPrice(price);
+				rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
+				for (int i = 0; i < rightLbl.length; i++) {
+					for (int j = 1; j < rightLbl[i].length; j++) {
+						rightLbl[i][j].setIcon(defaultBall);
+					}
+				}
+				lottoList.removeAll(lottoList);
+				pasteBtnFalse();
+				copyBtnReset();
 				dispose();
 			}
 		});
@@ -217,6 +237,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 				} else {
 					ballAllSelected();
 				}
+				numberBoxAllBlack(); // new
 				lottoSet.removeAll(lottoSet);
 			}
 		});
@@ -331,8 +352,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 		copyBtn[3].setBounds(375, 19, 75, 23);
 		copyBtn[4].setBounds(375, 21, 75, 23);
 
-		// 오른쪽 결제금액 텍스트 구현
-		JLabel rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
+		rightBottomTextLbl = new JLabel("결제금액 : " + consumer.getPrice() + "원");
 		rightBottomTextLbl.setFont(new Font("맑은 고딕", Font.BOLD, 18));
 		rightBottomTextLbl.setBounds(158, 388, 150, 50);
 		rightPnl.add(rightBottomTextLbl);
@@ -375,6 +395,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 							lottoSet.add(lottoList.get(i).get(j));
 							numberBox[lottoList.get(i).get(j) - 1].setEnabled(true);
 							numberBox[lottoList.get(i).get(j) - 1].setSelected(true);
+							numberBox[lottoList.get(i).get(j) - 1]
+									.setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1))); // new
 						}
 						index = i;
 						copyBtnReset();
@@ -393,10 +415,10 @@ public class BuyFrame extends JFrame implements ActionListener {
 						deleteBtn[lottoList.size() - 1].setEnabled(false);
 						copyBtn[lottoList.size() - 1].setEnabled(false);
 						lottoList.remove(i);
-						rightLblReset();
+						rightLblReset(); // reset을 defaultball로 new
 						for (int j = 0; j < lottoList.size(); j++) {
 							for (int k = 0; k < lottoList.get(j).size(); k++) {
-								rightLbl[j][k + 1].setIcon(defaultBall);
+								rightLbl[j][k + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(j).get(k) - 1))); // new
 							}
 						}
 						consumer.setPrice(-1000);
@@ -429,7 +451,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 					if (e.getSource() == pasteBtn[i]) {
 						lottoList.add(copyList);
 						for (int j = 0; j < copyList.size(); j++) {
-							rightLbl[i][j + 1].setIcon(numberBox[copyList.get(j)].getIcon());
+							rightLbl[i][j + 1].setIcon(new ImageIcon(getColorNumber(copyList.get(j) - 1))); // new
 						}
 						consumer.setPrice(1000);
 						rightBottomTextLbl.setText("총 금액: " + consumer.getPrice() + "원");
@@ -490,8 +512,10 @@ public class BuyFrame extends JFrame implements ActionListener {
 					ballAllSelected(); // checkbox를 모두 활성화 시킨다.
 					lottoSet.removeAll(lottoSet); // set을 지워준다.
 					for (int j = 0; j < lottoList.get(index).size(); j++) {
-						rightLbl[index][j + 1].setIcon(numberBox[lottoList.get(index).get(j)].getIcon());
+						rightLbl[index][j + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
 					}
+					System.out.println(lottoList);
+					numberBoxAllBlack(); // new
 					changeTrue = false; // 다시 수정 버튼을 누르기 전으로 돌아간다.
 				} else {
 					if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) { // 5장 넘게 구매X
@@ -516,8 +540,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 								lottoList.add(list);
 								ballAllReset();
 								lottoSet.removeAll(lottoSet); // set을 초기화
-								consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 							}
+							consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 						} else if (manualRBtn.isSelected()) {
 							if (lottoSet.size() == 6) {
 								List<Integer> list = new ArrayList<Integer>(lottoSet);
@@ -541,8 +565,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 								lottoList.add(list);
 								ballAllReset();
 								lottoSet.removeAll(lottoSet); // set을 초기화
-								consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
+
 							}
+							consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 						}
 						// 구매 확인창에 번호를 보내줌
 						for (int i = 0; i < lottoList.size(); i++) {
@@ -550,7 +575,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 							deleteBtn[i].setEnabled(true);
 							copyBtn[i].setEnabled(true);
 							for (int j = 0; j < lottoList.get(i).size(); j++) {
-								rightLbl[i][j + 1].setIcon(numberBox[lottoList.get(i).get(j) - 1].getIcon());
+								rightLbl[i][j + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1)));
 							}
 						}
 						if (autoRBtn.isSelected()) {
@@ -560,6 +585,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 						}
 						rightBottomTextLbl.setText("결제금액: " + consumer.getPrice() + "원");
 						purchaseCombo.setSelectedIndex(0);
+//						System.out.println(lottoList);
+						numberBoxAllBlack();
 					}
 				}
 			}
@@ -598,6 +625,13 @@ public class BuyFrame extends JFrame implements ActionListener {
 			}
 		} else {
 			ballAllSelected();
+		}
+	}
+
+	// numberBox를 모두 검은색으로 new
+	public void numberBoxAllBlack() {
+		for (int i = 0; i < numberBox.length; i++) {
+			numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
 		}
 	}
 
@@ -642,7 +676,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 	public void rightLblReset() {
 		for (int i = 0; i < rightLbl.length; i++) {
 			for (int j = 1; j < rightLbl[i].length; j++) {
-				rightLbl[i][j].setText("");
+				rightLbl[i][j].setIcon(defaultBall);
 			}
 		}
 	}
