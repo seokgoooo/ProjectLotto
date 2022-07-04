@@ -1,5 +1,9 @@
+import java.awt.CardLayout;
+import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
@@ -22,29 +26,39 @@ import javax.swing.JButton;
 
 public class Main3 extends JFrame {
 	private JCheckBox[] ball;
-	private JCheckBox[][] Rball = new JCheckBox[5][6];
+	private JCheckBox[][][] Rball;
 	private JPanel[] ballPnl = new JPanel[5];
-	private JLabel[] lblA = new JLabel[5];
-	private JLabel[] lblWin = new JLabel[5];
+	private JLabel[][] lblA;
+	private JLabel[][] lblWin;
 	private List<Integer> listFortyFive = new ArrayList<>();
 	private List<Integer> lottoList = new ArrayList<>();
 	private Integer bonusNumber = 0;
 	private Random random = new Random();
 	private boolean raffleEnd = false;
 	private List<List<Integer>> purchaseList = new ArrayList<>();
+
 //	private JScrollPane scroll = new JScrollPane();
 
 	public Main3() {
 		super("번호추첨");
 
+		CardLayout card = new CardLayout();
+		JPanel fullPnl = new JPanel();
+		JPanel subPnl = new JPanel(card);
+
 		for (int i = 0; i < 45; i++) {
 			listFortyFive.add(i + 1);
 		}
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 16; i++) {
 			purchaseList.add(lotto());
 		}
-		System.out.println(purchaseList);
+
+		int index = (int) Math.ceil(purchaseList.size() / 5.0);
+
+		Rball = new JCheckBox[index][5][6];
+		lblA = new JLabel[index][5];
+		lblWin = new JLabel[index][5];
 
 		JPanel mainPnl = new JPanel();
 		mainPnl.setBounds(0, 59, 994, 512);
@@ -79,17 +93,12 @@ public class Main3 extends JFrame {
 		mainPnl.add(lblreal);
 
 //-------------------------------------------------------------------------------------------------------- 오른쪽 부분		
-		JPanel pnlRight = new JPanel(); // 오른쪽 패널
-		pnlRight.setBounds(509, 120, 455, 350);
-		mainPnl.add(pnlRight);
-//		pnlRight.setLayout(null);
-		BoxLayout box = new BoxLayout(pnlRight, BoxLayout.Y_AXIS);
-		pnlRight.setLayout(box);
+		fullPnl.setBounds(509, 120, 455, 350);
+		mainPnl.add(fullPnl);
 
 		// 오른쪽 큰 패널 안에 가로 작은패널
 		JPanel pnlRball = new JPanel();
 		pnlRball.setBounds(0, 0, 453, 70);
-		pnlRight.add(pnlRball);
 		pnlRball.setLayout(null);
 // ----------------------------------------------------------------------------------------------------- 큰공 6개 넣는거
 		ball = new JCheckBox[6]; // 추첨 공 6개
@@ -100,9 +109,12 @@ public class Main3 extends JFrame {
 		}
 // ----------------------------------------------------------------------------------------------------- 
 		// 번호 추첨
+		JButton confirmClick = new JButton();
 		JButton btnClick = new JButton();
+		
 		btnClick.setBounds(163, 465, 210, 35);
 		mainPnl.add(btnClick);
+		
 		URL winImgUrl = Main3.class.getClassLoader().getResource("resources/win.png");
 		btnClick.setIcon(new ImageIcon(winImgUrl));
 		URL win3ImgUrl = Main3.class.getClassLoader().getResource("resources/win3.png");
@@ -132,8 +144,10 @@ public class Main3 extends JFrame {
 					if (lottoList.size() == 6) {
 						bonusNumber = number;
 						bonus.setIcon(new ImageIcon(getBigColorNumber(listFortyFive.get(number))));
-						raffleEnd = true;
+						purchaseList.remove(0);
 						purchaseList.add(0, lottoList);
+						confirmClick.setVisible(true);
+						raffleEnd = true;
 					} else {
 
 //					ball[lottoList.size()].setText(String.valueOf(listFortyFive.get(number)));
@@ -145,32 +159,78 @@ public class Main3 extends JFrame {
 			}
 		});
 		btnClick.setBorderPainted(false);
+//-----------------------------------------------------------------------------------------------
+		JPanel[] cardPnl = new JPanel[index];
+		JPanel[] cardInPnl = new JPanel[5];
+		JPanel pnlEast = new JPanel();
+		
 
-//-----------------------------------------------------------------------------------------------추첨 확인쪽 공 만들기
-		URL onlyImgUrl = Main3.class.getClassLoader().getResource("resources/only.png");
-		// 선택 완료쪽 빈공
-		for (int i = 0; i < Rball.length; i++) {
-			ballPnl[i] = new JPanel();
-			char c = (char) ('A' + i);
-			lblA[i] = new JLabel(String.valueOf(c) + "    ");
-			ballPnl[i].add(lblA[i]);
-			lblWin[i] = new JLabel("확인    ");
-			ballPnl[i].add(lblWin[i]);
-			for (int j = 0; j < 6; j++) {
-				Rball[i][j] = new JCheckBox();
-				ballPnl[i].add(Rball[i][j]);
-				Rball[i][j].setIcon(new ImageIcon(getBlackNumber(purchaseList.get(i).get(j))));
+		JButton btnPrev = new JButton("이전");
+		btnPrev.setFont(new Font("한컴 고딕", Font.BOLD, 13));
+		btnPrev.setBackground(Color.white);
+		pnlEast.add(btnPrev);
+
+		JButton btnNext = new JButton("다음");
+		btnNext.setFont(new Font("한컴 고딕", Font.BOLD, 13));
+		btnNext.setBackground(Color.white);
+		pnlEast.add(btnNext);
+
+		ActionListener listener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getActionCommand().equals("다음")) {
+					card.next(subPnl); // next 다음 컴포넌트를 보여줌
+				} else {
+					card.previous(subPnl); // previous 이전 컴포넌트를 보여줌
+				}
 			}
-//			lblWin[0].setText("1  등    ");
-			pnlRight.add(ballPnl[i]);
+		};
+		btnNext.addActionListener(listener);
+		btnPrev.addActionListener(listener);
+
+		fullPnl.add(subPnl);
+		fullPnl.add(pnlEast, "East");
+
+		int same = 0;
+		for (int i = 0; i < cardPnl.length; i++) {
+			cardPnl[i] = new JPanel();
+			BoxLayout cardBox = new BoxLayout(cardPnl[i], BoxLayout.Y_AXIS);
+			cardPnl[i].setLayout(cardBox);
+			char c = (char) ('A' + i);
+
+			subPnl.add(cardPnl[i], String.valueOf(c));
+
+			for (int j = 0; j < 5; j++) {
+				if (same == purchaseList.size()) {
+					break;
+				}
+				cardInPnl[j] = new JPanel();
+				char alpa = (char) ('A' + j);
+				lblA[i][j] = new JLabel(String.valueOf(alpa) + "    ");
+				lblWin[i][j] = new JLabel("확인    ");
+
+				cardInPnl[j].add(lblA[i][j]);
+				cardInPnl[j].add(lblWin[i][j]);
+
+				for (int k = 0; k < 6; k++) {
+					Rball[i][j][k] = new JCheckBox();
+					cardInPnl[j].add(Rball[i][j][k]);
+					Rball[i][j][k].setIcon(new ImageIcon(getBlackNumber(purchaseList.get(same).get(k))));
+				}
+				cardPnl[i].add(cardInPnl[j]);
+				same++;
+			}
+
 		}
-//		scroll.setViewportView(pnlRight);
-//		mainPnl.add(scroll);
+
+		card.show(subPnl, "A");
+//-----------------------------------------------------------------------------------------------추첨 확인쪽 공 만들기
 
 		URL me1ImgUrl = Main3.class.getClassLoader().getResource("resources/me1.png");
 		URL me2ImgUrl = Main3.class.getClassLoader().getResource("resources/me2.png");
-		JButton confirmClick = new JButton();
+
 		confirmClick.setBounds(650, 465, 210, 35);
+		confirmClick.setVisible(false);
 		mainPnl.add(confirmClick);
 		confirmClick.setIcon(new ImageIcon(me1ImgUrl));
 		confirmClick.addMouseListener(new MouseAdapter() {
@@ -189,53 +249,69 @@ public class Main3 extends JFrame {
 				confirmClick.setIcon(new ImageIcon(me2ImgUrl));
 			}
 
+			int same = 0;
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				confirmClick.setIcon(new ImageIcon(me1ImgUrl));
-				for (int i = 0; i < Rball.length; i++) {
-					switch (equalCounts(lottoList, purchaseList.get(i))) {
-					case 6:
-						lblWin[i].setText("1  등    ");
-						for (int j = 0; j < 6; j++) {
-							Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+				for (int i = 0; i < index; i++) {
+					for (int j = 0; j < 5; j++) {
+						if (same == purchaseList.size()) {
+							break;
 						}
-						break;
-					case 5:
-						if (purchaseList.get(i).contains(bonusNumber)) {
-							lblWin[i].setText("2  등    ");
-							for (int j = 0; j < 6; j++) {
-								Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+						switch (equalCounts(lottoList, purchaseList.get(same))) {
+						case 6:
+							lblWin[i][j].setText("1  등    ");
+							for (int k = 0; k < 6; k++) {
+								Rball[i][j][k].setIcon(new ImageIcon(getColorNumber(purchaseList.get(same).get(k))));
 							}
-						} else {
-							lblWin[i].setText("3  등    ");
-							for (int j = 0; j < 6; j++) {
-								if (lottoList.contains(purchaseList.get(i).get(j))) {
-									Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+							same++;
+							break;
+						case 5:
+							if (purchaseList.get(i).contains(bonusNumber)) {
+								lblWin[i][j].setText("2  등    ");
+								for (int k = 0; k < 6; k++) {
+									Rball[i][j][k]
+											.setIcon(new ImageIcon(getColorNumber(purchaseList.get(same).get(k))));
+								}
+							} else {
+								lblWin[i][j].setText("3  등    ");
+								for (int k = 0; k < 6; k++) {
+									if (lottoList.contains(purchaseList.get(same).get(k))) {
+										Rball[i][j][k]
+												.setIcon(new ImageIcon(getColorNumber(purchaseList.get(same).get(k))));
+									}
 								}
 							}
-						}
-						break;
-					case 4:
-						lblWin[i].setText("4  등    ");
-						for (int j = 0; j < 6; j++) {
-							if (lottoList.contains(purchaseList.get(i).get(j))) {
-								Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+							same++;
+							break;
+						case 4:
+							lblWin[i][j].setText("4  등    ");
+							for (int k = 0; k < 6; k++) {
+								if (lottoList.contains(purchaseList.get(same).get(k))) {
+									Rball[i][j][k]
+											.setIcon(new ImageIcon(getColorNumber(purchaseList.get(same).get(k))));
+								}
 							}
-						}
-						break;
-					case 3:
-						lblWin[i].setText("5 등    ");
-						for (int j = 0; j < 6; j++) {
-							if (lottoList.contains(purchaseList.get(i).get(j))) {
-								Rball[i][j].setIcon(new ImageIcon(getColorNumber(purchaseList.get(i).get(j))));
+							same++;
+							break;
+						case 3:
+							lblWin[i][j].setText("5 등    ");
+							for (int k = 0; k < 6; k++) {
+								if (lottoList.contains(purchaseList.get(same).get(k))) {
+									Rball[i][j][k]
+											.setIcon(new ImageIcon(getColorNumber(purchaseList.get(same).get(k))));
+								}
 							}
+							same++;
+							break;
+						default:
+							lblWin[i][j].setText("탈락    ");
+							same++;
+							break;
 						}
-						break;
-					default:
-						lblWin[i].setText("탈락    ");
-						break;
-					}
 
+					}
 				}
 			}
 		});
@@ -253,12 +329,6 @@ public class Main3 extends JFrame {
 		setFocusable(true);
 
 // -----------------------------------------------------------------------------------------------------------
-		setSize(1000, 600);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setResizable(false);
-		setLocationRelativeTo(null); // 창이 가운데에서 출력된다
-		getContentPane().setLayout(null);
-
 		JButton btnHome = new JButton();
 		btnHome.addMouseListener(new MouseAdapter() {
 			@Override
@@ -281,6 +351,12 @@ public class Main3 extends JFrame {
 		URL home2ImgUrl = Main3.class.getClassLoader().getResource("resources/home2.png");
 		btnHome.setIcon(new ImageIcon(home2ImgUrl));
 		btnHome.setBorderPainted(false);
+
+		setSize(1000, 600);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
+		setLocationRelativeTo(null); // 창이 가운데에서 출력된다
+		getContentPane().setLayout(null);
 
 	}
 
@@ -319,11 +395,6 @@ public class Main3 extends JFrame {
 
 		return listDuplicate.size();
 	}
-//	// 교집합
-//	Set<Integer> setDuplicate = new HashSet<>();
-//	setDuplicate.addAll(setA);
-//	setDuplicate.retainAll(setB);
-//	System.out.println(setDuplicate);
 
 	public static void main(String[] args) {
 		new Main3().setVisible(true);
