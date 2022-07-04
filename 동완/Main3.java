@@ -79,21 +79,7 @@ public class Main3 extends JFrame {
 		lblreal.setBounds(45, 140, 460, 312);
 		lblreal.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\out.gif"));
 		mainPnl.add(lblreal);
-
-//-------------------------------------------------------------------------------------------------------- 오른쪽 부분		
-		JPanel pnlRight = new JPanel(); // 오른쪽 패널
-		pnlRight.setBounds(509, 120, 455, 350);
-		mainPnl.add(pnlRight);
-//		pnlRight.setLayout(null);
-		BoxLayout box = new BoxLayout(pnlRight, BoxLayout.Y_AXIS);
-		pnlRight.setLayout(box);
-
-		// 오른쪽 큰 패널 안에 가로 작은패널
-		JPanel pnlRball = new JPanel();
-		pnlRball.setBounds(0, 0, 453, 70);
-		pnlRight.add(pnlRball);
-		pnlRball.setLayout(null);
-		
+// ---------------------------------------------------------------------------------------- 추첨버튼이랑 당첨확인버튼	
 		JButton btnClick = new JButton();
 		btnClick.setBounds(163, 465, 210, 35);
 		mainPnl.add(btnClick);
@@ -109,6 +95,38 @@ public class Main3 extends JFrame {
 			}
 		});
 		btnClick.setBorderPainted(false);
+		
+		JButton btnClick2 = new JButton();
+		btnClick2.setBounds(650, 465, 210, 35);
+		mainPnl.add(btnClick2);
+		btnClick2.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\isme.png"));
+		btnClick2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btnClick2.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\isme2.png"));
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnClick2.setIcon(new ImageIcon("D:\\Wani\\Mogu\\lotto\\image\\isme.png"));
+			}
+		});
+		btnClick2.setBorderPainted(false);
+
+//-------------------------------------------------------------------------------------------------------- 오른쪽 부분		
+		JPanel pnlRight = new JPanel(); // 오른쪽 패널
+		pnlRight.setBounds(509, 120, 455, 350);
+		mainPnl.add(pnlRight);
+//		pnlRight.setLayout(null);
+		BoxLayout box = new BoxLayout(pnlRight, BoxLayout.Y_AXIS);
+		pnlRight.setLayout(box);
+
+		// 오른쪽 큰 패널 안에 가로 작은패널
+		JPanel pnlRball = new JPanel();
+		pnlRball.setBounds(0, 0, 453, 70);
+		pnlRight.add(pnlRball);
+		pnlRball.setLayout(null);
+	
+	
 //-----------------------------------------------------------------------------------------------추첨 확인쪽 공 만들기
 		// 선택 완료쪽 빈공
 		for (int i = 0; i < Rball.length; i++) {
