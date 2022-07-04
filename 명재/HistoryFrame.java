@@ -22,28 +22,69 @@ import javax.swing.JPanel;
 public class HistoryFrame extends JFrame {
 	private List<List<Integer>> lottoList = new ArrayList<>();
 	private Random random = new Random(); // 랜덤객체 필드
-	private JCheckBox[][][] basicBall = new JCheckBox[2][5][6];
-	private JCheckBox[][] bonusBall = new JCheckBox[2][5];
-	private JPanel[][] basicBallPnl = new JPanel[2][5];
-	private JLabel[][] textLbl = new JLabel[2][5];
-	private JLabel[][] plusLbl = new JLabel[2][5];
-	private Integer[] bonus = new Integer[10];
+	private JCheckBox[][][] basicBall;
+	private JCheckBox[][] bonusBall;
+	private JPanel[][] basicBallPnl;
+	private JLabel[][] textLbl;
+	private JLabel[][] plusLbl;
+	private List<Integer> currentLotto = new ArrayList<>();
+	private Integer currentBonus = 0;
+	private List<Integer> bonus = new ArrayList<>();
+	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("resources/buyDefault.png");
+	private ImageIcon defaultBall = new ImageIcon(defaultBallImg);
+
+	public List<Integer> getCurrentLotto() {
+		return currentLotto;
+	}
+
+	public void setCurrentLotto(List<Integer> currentLotto) {
+		this.currentLotto = currentLotto;
+		System.out.println(this.currentLotto);
+		lottoList.add(currentLotto);
+		for (int j = 0; j < 6; j++) {
+			basicBall[(int) Math.ceil(lottoList.size() / 5.0) - 1][0][j]
+					.setIcon(new ImageIcon(getColorNumber(currentLotto.get(j) - 1)));
+		}
+
+	}
+
+	public Integer getCurrentBonus() {
+		return currentBonus;
+	}
+
+	public void setCurrentBonus(Integer currentBonus) {
+		this.currentBonus = currentBonus;
+		bonus.add(currentBonus);
+		bonusBall[(int) Math.ceil(lottoList.size() / 5.0) - 1][0].setIcon(new ImageIcon(getColorNumber(this.currentBonus)));
+	}
 
 	public HistoryFrame() {
 		super("역대당첨번호");
-
+		setSize(500, 600);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		
-		for(int i = 0; i < 10; i++) {
+
+		for (int i = 0; i < 10; i++) {
 			List<Integer> bonusList = lotto();
 			lottoList.add(bonusList);
-			bonus[i] = setBonus(bonusList);
-			
+			bonus.add(setBonus(bonusList));
 		}
-		
+
+		lottoList.add(currentLotto);
+		bonus.add(currentBonus);
+//		System.out.println(lottoList);
+
+		int index = (int) Math.ceil(lottoList.size() / 5.0);
+//		System.out.println(index);
+
+		basicBall = new JCheckBox[index][5][6];
+		bonusBall = new JCheckBox[index][5];
+		basicBallPnl = new JPanel[index][5];
+		textLbl = new JLabel[index][5];
+		plusLbl = new JLabel[index][5];
+
 		CardLayout card = new CardLayout();
-		JPanel[] cardPnl = new JPanel[2];
+		JPanel[] cardPnl = new JPanel[index];
 
 		JPanel wrapPnl = new JPanel();
 
@@ -54,13 +95,13 @@ public class HistoryFrame extends JFrame {
 		JPanel subPnl = new JPanel(card);
 		subPnl.setBounds(12, 72, 470, 490);
 
-		cardPnl[0] = new JPanel();
-		cardPnl[0].setBounds(12, 72, 470, 490);
-		subPnl.add(cardPnl[0], "A");
-
-		cardPnl[1] = new JPanel();
-		cardPnl[1].setBounds(12, 72, 470, 490);
-		subPnl.add(cardPnl[1], "B");
+		for (int i = 0; i < cardPnl.length; i++) {
+			cardPnl[i] = new JPanel();
+			BoxLayout box = new BoxLayout(cardPnl[i], BoxLayout.Y_AXIS);
+			cardPnl[i].setLayout(box);
+			cardPnl[i].setBounds(12, 72, 470, 490);
+			subPnl.add(cardPnl[i], String.valueOf((int) ('A' + i)));
+		}
 
 		JLabel mainlbl = new JLabel("역대 당첨 번호");
 		mainlbl.setBounds(0, 0, 494, 62);
@@ -72,13 +113,11 @@ public class HistoryFrame extends JFrame {
 		wrapPnl.add(mainlbl);
 		wrapPnl.add(subPnl);
 
-		BoxLayout box = new BoxLayout(cardPnl[0], BoxLayout.Y_AXIS);
-		cardPnl[0].setLayout(box);
-		BoxLayout box2 = new BoxLayout(cardPnl[1], BoxLayout.Y_AXIS);
-		cardPnl[1].setLayout(box2);
-
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < index; i++) {
 			for (int j = 0; j < 5; j++) {
+				if (i * 5 + j == lottoList.size()) {
+					break;
+				}
 				basicBallPnl[i][j] = new JPanel();
 
 				textLbl[i][j] = new JLabel("제 " + String.format("%02d", (i * 5 + j + 1)) + "회 ");
@@ -87,7 +126,11 @@ public class HistoryFrame extends JFrame {
 
 				for (int k = 0; k < 6; k++) {
 					basicBall[i][j][k] = new JCheckBox();
-					basicBall[i][j][k].setIcon(new ImageIcon(getColorNumber(lottoList.get(i * 5 + j).get(k))));
+					if (lottoList.get(i * 5 + j).size() == 0) {
+						basicBall[i][j][k].setIcon(defaultBall);
+					} else {
+						basicBall[i][j][k].setIcon(new ImageIcon(getColorNumber(lottoList.get(i * 5 + j).get(k))));
+					}
 					basicBallPnl[i][j].add(basicBall[i][j][k]);
 				}
 
@@ -96,7 +139,11 @@ public class HistoryFrame extends JFrame {
 				basicBallPnl[i][j].add(plusLbl[i][j]);
 
 				bonusBall[i][j] = new JCheckBox();
-				bonusBall[i][j].setIcon(new ImageIcon(getColorNumber(bonus[j + i * 5])));
+				if (lottoList.get(i * 5 + j).size() == 0) {
+					bonusBall[i][j].setIcon(defaultBall);
+				} else {
+					bonusBall[i][j].setIcon(new ImageIcon(getColorNumber(bonus.get(j + i * 5))));
+				}
 				basicBallPnl[i][j].add(bonusBall[i][j]);
 				cardPnl[i].add(basicBallPnl[i][j]);
 			}
@@ -116,7 +163,7 @@ public class HistoryFrame extends JFrame {
 		southPnl.add(prevBtn);
 		southPnl.add(nextBtn);
 		southPnl.setBackground(Color.white);
-		getContentPane().add(southPnl, "South");
+		add(southPnl, "South");
 
 		ActionListener cardListener = new ActionListener() {
 			@Override
@@ -131,21 +178,14 @@ public class HistoryFrame extends JFrame {
 		nextBtn.addActionListener(cardListener);
 		prevBtn.addActionListener(cardListener);
 
-		setSize(500, 600);
-	}
-
-	public static void main(String[] args) {
-		new HistoryFrame().setVisible(true);
 	}
 
 	public List<Integer> lotto() {
 		Set<Integer> set = new HashSet<>();
 		random = new Random();
-
 		while (set.size() < 6) {
 			set.add(random.nextInt(45) + 1);
 		}
-
 		List<Integer> list = new ArrayList<>(set);
 		Collections.sort(list);
 		return list;

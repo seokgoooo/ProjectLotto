@@ -685,7 +685,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 				if (numberBox[i].isSelected()) {
 					numberBox[i].setIcon(new ImageIcon(getColorNumber(i)));
 					lottoSet.add(i + 1);
-					System.out.println(lottoSet);
+//					System.out.println(lottoSet);
 				} else {
 					numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
 					lottoSet.remove(i + 1);
