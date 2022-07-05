@@ -402,9 +402,6 @@ public class LotteryFrame extends JFrame {
 				cardPnls[i].add(cardInPnls[j]);
 				same++;
 			}
-			
-			JLabel page = new JLabel(i + 1 + "  페이지");
-			cardPnls[i].add(page);
 
 		}
 

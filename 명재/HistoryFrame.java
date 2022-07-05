@@ -211,8 +211,31 @@ public class HistoryFrame extends JFrame {
 
 					bonusBall[index - 1][currentIndex].setIcon(new ImageIcon(getColorNumber(this.currentBonus)));
 				}
-
+				System.out.println(basicBallPnl.length);
 				if (currentIndex == 4) {
+					cardPnls = Arrays.copyOf(cardPnls, cardPnls.length + 1);
+					
+					basicBallPnl = Arrays.copyOf(basicBallPnl, basicBallPnl.length + 1);
+					basicBallPnl[index - 1] = new JPanel[5];
+					
+					basicBall = Arrays.copyOf(basicBall, basicBall.length + 1);
+					basicBall[index - 1] = new JCheckBox[5][6];
+					
+					textLbl = Arrays.copyOf(textLbl, textLbl.length + 1);
+					textLbl[index - 1] = new JLabel[5];
+					
+					plusLbl = Arrays.copyOf(plusLbl, plusLbl.length + 1);
+					plusLbl[index - 1] = new JLabel[5];
+					
+					bonusBall = Arrays.copyOf(bonusBall, bonusBall.length + 1);
+					bonusBall[index - 1] = new JCheckBox[5];
+
+					cardPnls[index - 1] = new JPanel();
+					BoxLayout box = new BoxLayout(cardPnls[index - 1], BoxLayout.Y_AXIS);
+					cardPnls[index - 1].setLayout(box);
+					cardPnls[index - 1].setBounds(12, 72, 470, 490);
+					subPnl.add(cardPnls[index - 1], String.valueOf((int) ('A' + (index - 1))));
+
 					currentIndex = 0;
 				} else {
 					currentIndex++;
@@ -242,6 +265,11 @@ public class HistoryFrame extends JFrame {
 			}
 			card.show(subPnl, "A");
 		}
+	}
+
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 
 	public List<Integer> lotto() {
