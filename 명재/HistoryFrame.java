@@ -82,7 +82,6 @@ public class HistoryFrame extends JFrame {
 
 		lottoList.add(currentLotto);
 		bonus.add(currentBonus);
-//		System.out.println(lottoList);
 
 		repaintHistoryFrame();
 
@@ -126,7 +125,6 @@ public class HistoryFrame extends JFrame {
 	}
 
 	public void repaintHistoryFrame() {
-		System.out.println(lottoList.size());
 		int index = (int) Math.ceil(lottoList.size() / 5.0);
 		if (paintCount == 0) {
 			basicBall = new JCheckBox[index][5][6];
@@ -194,7 +192,7 @@ public class HistoryFrame extends JFrame {
 
 			card.show(subPnl, "A");
 			paintCount++;
-		} else {			
+		} else {
 			if (currentLotto.size() == 0) {
 
 			} else {
@@ -227,14 +225,12 @@ public class HistoryFrame extends JFrame {
 					cardPnls[index - 1].setLayout(box);
 					cardPnls[index - 1].setBounds(12, 72, 470, 490);
 					subPnl.add(cardPnls[index - 1], String.valueOf((int) ('A' + (index - 1))));
-
+					System.out.println(basicBallPnl[index - 1][0]);
 					currentIndex = 0;
 				} else {
 					currentIndex++;
 				}
-				
-				System.out.println(currentIndex);
-				
+
 				basicBallPnl[index - 1][currentIndex] = new JPanel();
 				textLbl[index - 1][currentIndex] = new JLabel("제 " + String.format("%02d", lottoList.size()) + "회 ");
 				textLbl[index - 1][currentIndex].setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 13));
@@ -257,6 +253,7 @@ public class HistoryFrame extends JFrame {
 				basicBallPnl[index - 1][currentIndex].add(bonusBall[index - 1][currentIndex]);
 				cardPnls[index - 1].add(basicBallPnl[index - 1][currentIndex]);
 			}
+			card.show(subPnl, "A");
 		}
 	}
 

@@ -61,7 +61,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 	public BuyFrame() {
 		super("로또 구매");
 		lottoList = new ArrayList<>();
-		System.out.println(lottoList);
 		setSize(1000, 600);
 		setBackground(Color.white);
 		setResizable(false);
@@ -388,6 +387,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				for (int i = 0; i < deleteBtn.length; i++) {
+
 					if (e.getSource() == deleteBtn[i]) {
 						changeBtn[lottoList.size() - 1].setEnabled(false);
 						deleteBtn[lottoList.size() - 1].setEnabled(false);
@@ -398,6 +398,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 							for (int k = 0; k < lottoList.get(j).size(); k++) {
 								rightLbl[j][k + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(j).get(k) - 1))); // new
 							}
+							copyBtn[j].setEnabled(true);
 						}
 						consumer.setPrice(-1000);
 						rightBottomTextLbl.setText(
@@ -566,10 +567,18 @@ public class BuyFrame extends JFrame implements ActionListener {
 							consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 						}
 						// 구매 확인창에 번호를 보내줌
+						if (lottoList.size() == 5) {
+							for (int i = 0; i < copyBtn.length; i++) {
+								copyBtn[i].setEnabled(false);
+							}
+						} else {
+							for (int i = 0; i < lottoList.size(); i++) {
+								copyBtn[i].setEnabled(true);
+							}
+						}
 						for (int i = 0; i < lottoList.size(); i++) {
 							changeBtn[i].setEnabled(true);
 							deleteBtn[i].setEnabled(true);
-							copyBtn[i].setEnabled(true);
 							for (int j = 0; j < lottoList.get(i).size(); j++) {
 								rightLbl[i][j + 1].setIcon(new ImageIcon(getColorNumber(lottoList.get(i).get(j) - 1)));
 							}
@@ -685,7 +694,6 @@ public class BuyFrame extends JFrame implements ActionListener {
 				if (numberBox[i].isSelected()) {
 					numberBox[i].setIcon(new ImageIcon(getColorNumber(i)));
 					lottoSet.add(i + 1);
-//					System.out.println(lottoSet);
 				} else {
 					numberBox[i].setIcon(new ImageIcon(getBlackNumber(i)));
 					lottoSet.remove(i + 1);

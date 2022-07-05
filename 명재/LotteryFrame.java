@@ -61,7 +61,6 @@ public class LotteryFrame extends JFrame {
 
 	public void setConsumer(Consumer consumer) {
 		this.consumer = consumer;
-		System.out.println(this.consumer.getLottoList());
 	}
 
 	public List<Integer> getLottoList() {
@@ -232,15 +231,11 @@ public class LotteryFrame extends JFrame {
 				confirmClick.setIcon(new ImageIcon(me2ImgUrl));
 			}
 
-
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				int same = 0;
 				confirmClick.setIcon(new ImageIcon(me1ImgUrl));
 				for (int i = 0; i < index; i++) {
-					System.out.println('a');
-					System.out.println(same);
-					System.out.println(purchaseList);
 					for (int j = 0; j < 5; j++) {
 						if (same == purchaseList.size()) {
 							break;
@@ -409,7 +404,7 @@ public class LotteryFrame extends JFrame {
 			}
 
 		}
-	
+
 		card.show(subPnl, "A");
 	}
 
