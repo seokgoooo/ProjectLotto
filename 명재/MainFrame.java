@@ -123,11 +123,11 @@ public class MainFrame extends JFrame implements ActionListener {
 //			ToDo : 구매하기 버튼을 누르면 구매하기 창으로 이동
 			buyFrame.allInit();
 			buyFrame.setVisible(true);
-//			System.out.println(lotteryFrame.getConsumer().getLottoList());
 
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
 			if (lotteryCount == 0) {
+				lotteryFrame.resetLottery();
 				consumer = buyFrame.getConsumer();
 				lotteryFrame.setConsumer(consumer);
 				lotteryFrame.repaintLotteryFrame();
@@ -146,6 +146,11 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		} else if (click == nextBtn) {
 //			ToDo : 당첨확인 버튼을 누르면 당첨확인 창으로 이동
+			if(historyCount == 0) {
+				historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
+				historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
+				historyFrame.repaintHistoryFrame();
+			}
 			buyFrame.allInit();
 			buyFrame.setConsumer(new Consumer());
 			historyCount = 0;

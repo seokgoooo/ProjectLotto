@@ -42,6 +42,9 @@ public class LotteryFrame extends JFrame {
 	private JPanel[] cardInPnls;
 	private JPanel pnlRball;
 	private int index;
+	private URL bigImgUrl;
+	private int paintCount = 0;
+	private JCheckBox bonus;
 
 	public Integer getBonusNumber() {
 		return bonusNumber;
@@ -74,7 +77,7 @@ public class LotteryFrame extends JFrame {
 		card = new CardLayout();
 		fullPnl = new JPanel();
 		subPnl = new JPanel(card);
-		
+
 		repaintLotteryFrame();
 
 		for (int i = 0; i < 45; i++) {
@@ -95,9 +98,9 @@ public class LotteryFrame extends JFrame {
 		mainPnl.add(pnlBonus);
 		pnlBonus.setLayout(null);
 
-		JCheckBox bonus = new JCheckBox(); // 보너스 공
+		bonus = new JCheckBox();
 		bonus.setBounds(127, 0, 120, 110);
-		URL bigImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/lotteryDefault.png");
+		bigImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/lotteryDefault.png");
 		bonus.setIcon(new ImageIcon(bigImgUrl));
 		pnlBonus.add(bonus);
 
@@ -165,8 +168,6 @@ public class LotteryFrame extends JFrame {
 						confirmClick.setVisible(true);
 						raffleEnd = true;
 					} else {
-
-//					ball[lottoList.size()].setText(String.valueOf(listFortyFive.get(number)));
 						ball[lottoList.size()].setIcon(new ImageIcon(getBigColorNumber(listFortyFive.get(number))));
 						lottoList.add(listFortyFive.get(number));
 						listFortyFive.remove(listFortyFive.get(number));
@@ -230,12 +231,15 @@ public class LotteryFrame extends JFrame {
 				confirmClick.setIcon(new ImageIcon(me2ImgUrl));
 			}
 
-			int same = 0;
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				int same = 0;
 				confirmClick.setIcon(new ImageIcon(me1ImgUrl));
 				for (int i = 0; i < index; i++) {
+					System.out.println('a');
+					System.out.println(same);
+					System.out.println(purchaseList);
 					for (int j = 0; j < 5; j++) {
 						if (same == purchaseList.size()) {
 							break;
@@ -345,6 +349,18 @@ public class LotteryFrame extends JFrame {
 
 	}
 
+	public void resetLottery() {
+
+		lottoList.removeAll(lottoList);
+		purchaseList.removeAll(purchaseList);
+		subPnl.removeAll();
+		for (int i = 0; i < ball.length; i++) {
+			ball[i].setIcon(new ImageIcon(bigImgUrl));
+		}
+		bonus.setIcon(new ImageIcon(bigImgUrl));
+		raffleEnd = false;
+	}
+
 	public void repaintLotteryFrame() {
 
 		for (int i = 0; i < consumer.getLottoList().size(); i++) {
@@ -391,7 +407,7 @@ public class LotteryFrame extends JFrame {
 			}
 
 		}
-
+	
 		card.show(subPnl, "A");
 	}
 
