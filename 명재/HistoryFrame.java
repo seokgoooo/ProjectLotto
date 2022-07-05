@@ -31,7 +31,7 @@ public class HistoryFrame extends JFrame {
 	private List<Integer> currentLotto = new ArrayList<>();
 	private Integer currentBonus = 0;
 	private List<Integer> bonus = new ArrayList<>();
-	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("resources/buyDefault.png");
+	private URL defaultBallImg = BuyFrame.class.getClassLoader().getResource("buyDefault.png");
 	private ImageIcon defaultBall = new ImageIcon(defaultBallImg);
 	private JPanel subPnl;
 	private CardLayout card;
@@ -283,12 +283,12 @@ public class HistoryFrame extends JFrame {
 	}
 
 	public URL getBlackNumber(int i) {
-		URL url = HistoryFrame.class.getClassLoader().getResource("resources/NumberBlack/" + (i) + ".png");
+		URL url = HistoryFrame.class.getClassLoader().getResource("NumberBlack/" + (i) + ".png");
 		return url;
 	}
 
 	public URL getColorNumber(int i) {
-		URL url = HistoryFrame.class.getClassLoader().getResource("resources/NumberColor/" + (i) + ".png");
+		URL url = HistoryFrame.class.getClassLoader().getResource("NumberColor/" + (i) + ".png");
 		return url;
 	}
 }

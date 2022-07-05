@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MainFrame extends JFrame implements ActionListener {
@@ -22,6 +23,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JLabel countLotto;
 	private int historyCount = 0;
 	private int lotteryCount = 0;
+	private JPanel wrapPnl;
 
 	public MainFrame() {
 		super("로또 추첨");
@@ -35,7 +37,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// 전체 담는 패널
-		JPanel wrapPnl = new JPanel();
+		wrapPnl = new JPanel();
 		wrapPnl.setLayout(null);
 		add(wrapPnl);
 
@@ -63,7 +65,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		imgPnl.setLayout(null);
 		wrapPnl.add(imgPnl);
 
-		URL imgUrl = MainFrame.class.getClassLoader().getResource("resources/main_01.png");
+		URL imgUrl = MainFrame.class.getClassLoader().getResource("main_01.png");
 		JLabel imgLbl = new JLabel(new ImageIcon(imgUrl));
 		imgLbl.setBounds(0, 0, 994, 352);
 //		mainImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -74,7 +76,7 @@ public class MainFrame extends JFrame implements ActionListener {
 //		프로그램 실행시키는데 있어서 시간소요가 많이 되어 이 작업을 없애고
 //		이미지 자체 해상도를 줄이는 방법으로 해결
 
-//		ImageIcon mainImageIcon = new ImageIcon("resources/main_01.png");
+//		ImageIcon mainImageIcon = new ImageIcon("main_01.png");
 //		Image mainImage = mainImageIcon.getImage().getScaledInstance(1000, 350, Image.SCALE_SMOOTH);
 //		ImageIcon changeMainIcon = new ImageIcon(mainImage);
 //		mainImageLabel.setIcon(changeMainIcon);
@@ -83,28 +85,28 @@ public class MainFrame extends JFrame implements ActionListener {
 		// 메인 화면 구매하기 버튼 구현
 		buyBtn = new JButton();
 		buyBtn.setBounds(0, 416, 245, 155);
-		URL buyUrl = MainFrame.class.getClassLoader().getResource("resources/mainButton_01.png");
+		URL buyUrl = MainFrame.class.getClassLoader().getResource("mainButton_01.png");
 		buyBtn.setIcon(new ImageIcon(buyUrl));
 		wrapPnl.add(buyBtn);
 
 		// 메인 화면 번호추첨 버튼 구현
 		lotteryBtn = new JButton();
 		lotteryBtn.setBounds(250, 416, 245, 155);
-		URL lotteryUrl = MainFrame.class.getClassLoader().getResource("resources/mainButton_02.png");
+		URL lotteryUrl = MainFrame.class.getClassLoader().getResource("mainButton_02.png");
 		lotteryBtn.setIcon(new ImageIcon(lotteryUrl));
 		wrapPnl.add(lotteryBtn);
 
 		// 메인 화면 역대당첨번호 버튼 구현
 		historyBtn = new JButton();
 		historyBtn.setBounds(500, 416, 245, 155);
-		URL historyUrl = MainFrame.class.getClassLoader().getResource("resources/mainButton_03.png");
+		URL historyUrl = MainFrame.class.getClassLoader().getResource("mainButton_03.png");
 		historyBtn.setIcon(new ImageIcon(historyUrl));
 		wrapPnl.add(historyBtn);
 
 		// 메인 화면 다음 회차 버튼 구현
 		nextBtn = new JButton();
 		nextBtn.setBounds(750, 416, 245, 155);
-		URL checkUrl = MainFrame.class.getClassLoader().getResource("resources/mainButton_04.png");
+		URL checkUrl = MainFrame.class.getClassLoader().getResource("mainButton_04.png");
 		nextBtn.setIcon(new ImageIcon(checkUrl));
 		nextBtn.setEnabled(true);
 		wrapPnl.add(nextBtn);
@@ -126,27 +128,35 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
-			if (lotteryCount == 0) {
-				lotteryFrame.resetLottery();
-				consumer = buyFrame.getConsumer();
-				lotteryFrame.setConsumer(consumer);
-				lotteryFrame.repaintLotteryFrame();
-				lotteryCount++;
+			if (buyFrame.getConsumer().getLottoList().size() != 0) {
+				if (lotteryCount == 0) {
+					lotteryFrame.resetLottery();
+					consumer = buyFrame.getConsumer();
+					lotteryFrame.setConsumer(consumer);
+					lotteryFrame.repaintLotteryFrame();
+					lotteryCount++;
+				}
+				lotteryFrame.setVisible(true);
+			} else {
+				JOptionPane.showMessageDialog(wrapPnl, "구매를 먼저 진행해주세요");
 			}
-			lotteryFrame.setVisible(true);
 		} else if (click == historyBtn) {
 //			ToDo : 역대당첨번호 버튼을 누르면 역대당첨번호 창으로 이동
 			if (historyCount == 0) {
-				historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
-				historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
-				historyFrame.repaintHistoryFrame();
-				historyCount++;
+				if (lotteryFrame.getLottoList().size() == 0) {
+
+				} else {
+					historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
+					historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
+					historyFrame.repaintHistoryFrame();
+					historyCount++;
+				}
 			}
 			historyFrame.setVisible(true);
 
 		} else if (click == nextBtn) {
 //			ToDo : 당첨확인 버튼을 누르면 당첨확인 창으로 이동
-			if(historyCount == 0) {
+			if (historyCount == 0) {
 				historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
 				historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
 				historyFrame.repaintHistoryFrame();
@@ -155,6 +165,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			buyFrame.setConsumer(new Consumer());
 			historyCount = 0;
 			lotteryCount = 0;
+			lotteryFrame.resetLottery();
 			countLotto.setText(historyFrame.getLottoList().size() + "회차");
 
 		}

@@ -45,6 +45,7 @@ public class LotteryFrame extends JFrame {
 	private URL bigImgUrl;
 	private int paintCount = 0;
 	private JCheckBox bonus;
+	private JButton confirmClick;
 
 	public Integer getBonusNumber() {
 		return bonusNumber;
@@ -100,7 +101,7 @@ public class LotteryFrame extends JFrame {
 
 		bonus = new JCheckBox();
 		bonus.setBounds(127, 0, 120, 110);
-		bigImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/lotteryDefault.png");
+		bigImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryDefault.png");
 		bonus.setIcon(new ImageIcon(bigImgUrl));
 		pnlBonus.add(bonus);
 
@@ -112,7 +113,7 @@ public class LotteryFrame extends JFrame {
 
 		JLabel lblreal = new JLabel(); // 퇴사짤 레이블
 		lblreal.setBounds(45, 140, 460, 312);
-		URL outImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/lotteryGif.gif");
+		URL outImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryGif.gif");
 		lblreal.setIcon(new ImageIcon(outImgUrl));
 		mainPnl.add(lblreal);
 
@@ -128,15 +129,15 @@ public class LotteryFrame extends JFrame {
 		}
 // ----------------------------------------------------------------------------------------------------- 
 		// 번호 추첨
-		JButton confirmClick = new JButton();
+		confirmClick = new JButton();
 		JButton btnClick = new JButton();
 
 		btnClick.setBounds(163, 465, 210, 35);
 		mainPnl.add(btnClick);
 
-		URL winImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/lotteryBtn_01.png");
+		URL winImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryBtn_01.png");
 		btnClick.setIcon(new ImageIcon(winImgUrl));
-		URL win3ImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/lotteryBtn_03.png");
+		URL win3ImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryBtn_03.png");
 		btnClick.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -207,8 +208,8 @@ public class LotteryFrame extends JFrame {
 
 //-----------------------------------------------------------------------------------------------추첨 확인쪽 공 만들기
 
-		URL me1ImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/lotteryBtn_04.png");
-		URL me2ImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/lotteryBtn_05.png");
+		URL me1ImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryBtn_04.png");
+		URL me2ImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryBtn_05.png");
 
 		confirmClick.setBounds(650, 465, 210, 35);
 		confirmClick.setVisible(false);
@@ -338,7 +339,7 @@ public class LotteryFrame extends JFrame {
 		});
 		btnHome.setBounds(30, 5, 50, 50);
 		mainlbl.add(btnHome);
-		URL home2ImgUrl = LotteryFrame.class.getClassLoader().getResource("resources/homePink.png");
+		URL home2ImgUrl = LotteryFrame.class.getClassLoader().getResource("homePink.png");
 		btnHome.setIcon(new ImageIcon(home2ImgUrl));
 		btnHome.setBorderPainted(false);
 
@@ -354,6 +355,7 @@ public class LotteryFrame extends JFrame {
 		lottoList.removeAll(lottoList);
 		purchaseList.removeAll(purchaseList);
 		subPnl.removeAll();
+		confirmClick.setVisible(false);
 		for (int i = 0; i < ball.length; i++) {
 			ball[i].setIcon(new ImageIcon(bigImgUrl));
 		}
@@ -412,17 +414,17 @@ public class LotteryFrame extends JFrame {
 	}
 
 	public URL getBigColorNumber(int i) {
-		URL url = LotteryFrame.class.getClassLoader().getResource("resources/NumberBig/" + (i) + ".png");
+		URL url = LotteryFrame.class.getClassLoader().getResource("NumberBig/" + (i) + ".png");
 		return url;
 	}
 
 	public URL getBlackNumber(int i) {
-		URL url = LotteryFrame.class.getClassLoader().getResource("resources/NumberBlack/" + (i) + ".png");
+		URL url = LotteryFrame.class.getClassLoader().getResource("NumberBlack/" + (i) + ".png");
 		return url;
 	}
 
 	public URL getColorNumber(int i) {
-		URL url = LotteryFrame.class.getClassLoader().getResource("resources/NumberColor/" + (i) + ".png");
+		URL url = LotteryFrame.class.getClassLoader().getResource("NumberColor/" + (i) + ".png");
 		return url;
 	}
 
