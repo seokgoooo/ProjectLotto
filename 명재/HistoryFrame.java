@@ -74,7 +74,7 @@ public class HistoryFrame extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 14; i++) {
 			List<Integer> bonusList = lotto();
 			lottoList.add(bonusList);
 			bonus.add(setBonus(bonusList));

@@ -174,7 +174,6 @@ public class MainFrame extends JFrame implements ActionListener {
 			} else {
 				JOptionPane.showMessageDialog(wrapPnl, "아직 이번 회차 추첨이 진행되지 않았습니다.");
 			}
-		
 
 		}
 	}

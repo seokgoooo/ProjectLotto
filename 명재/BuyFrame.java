@@ -49,6 +49,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 	private JRadioButton manualRBtn;
 	private List<List<Integer>> lottoList;
 	private JComboBox<Integer> purchaseCombo;
+	private boolean yes = true;
 
 	public Consumer getConsumer() {
 		return consumer;
@@ -423,6 +424,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 						pasteBtn[lottoList.size()].setVisible(true);
 					}
 				}
+				ballAllUnSelected();
+				leftCheckBtn.setEnabled(false);
 			}
 		};
 
@@ -451,6 +454,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 						copyBtnReset();
 					}
 				}
+				ballAllSelected();
+				leftCheckBtn.setEnabled(true);
 			}
 		};
 
@@ -463,6 +468,11 @@ public class BuyFrame extends JFrame implements ActionListener {
 		rightBuyBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (lottoList.size() > 0 && lottoList.size() <= 6) {
+					JOptionPane.showMessageDialog(BuyFrame.this, "구매완료! 당첨확인 바랍니다");
+				} else {
+					JOptionPane.showMessageDialog(BuyFrame.this, "로또를 구매하세요!");
+				}
 				consumer.setLottoList(lottoList);
 				lottoList.removeAll(lottoList);
 //				----------------------------------------------------------------------------------
@@ -489,6 +499,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 				if (changeTrue) {
 					if (lottoSet.size() < 6) {
 						JOptionPane.showMessageDialog(BuyFrame.this, "번호 6개를 선택해 주세요");
+
 					} else {
 						lottoList.remove(lottoList.get(index)); // index에 해당하는 배열을 지운다.
 						List<Integer> list = new ArrayList<Integer>(lottoSet); // 새로 수정한 lotto set을 list로 만든다.
@@ -501,12 +512,14 @@ public class BuyFrame extends JFrame implements ActionListener {
 							rightLbl[index][j + 1]
 									.setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
 						}
+						
 						numberBoxAllBlack(); // new
 						semiAutoRBtn.setEnabled(true);
 						autoRBtn.setEnabled(true);
 						purchaseCombo.setEnabled(true);
 						rightResetBtn.setEnabled(true);
 						rightBuyBtn.setEnabled(true);
+						
 						for (int i = 0; i < lottoList.size(); i++) {
 							changeBtn[i].setEnabled(true);
 							deleteBtn[i].setEnabled(true);
@@ -551,6 +564,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 								consumer.setPrice((purchaseCombo.getSelectedIndex() + 1) * 1000);
 							} else {
 								JOptionPane.showMessageDialog(BuyFrame.this, "번호 6개를 선택해 주세요");
+								yes = false;
 							}
 						} else {
 							for (int i = 0; i < purchaseCombo.getSelectedIndex() + 1; i++) {
@@ -591,7 +605,9 @@ public class BuyFrame extends JFrame implements ActionListener {
 						rightBottomTextLbl.setText(
 								"결제금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
 						purchaseCombo.setSelectedIndex(0);
-						numberBoxAllBlack();
+						if(yes) {
+							numberBoxAllBlack();
+						}
 					}
 				}
 			}

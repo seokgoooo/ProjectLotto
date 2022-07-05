@@ -403,6 +403,8 @@ public class LotteryFrame extends JFrame {
 				same++;
 			}
 
+			JLabel page = new JLabel(i + 1 + "  페이지");
+			cardPnls[i].add(page);
 		}
 
 		card.show(subPnl, "A");
