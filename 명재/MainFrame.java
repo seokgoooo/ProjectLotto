@@ -128,12 +128,14 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
+
 			if (buyFrame.getConsumer().getLottoList().size() != 0) {
 				if (lotteryCount == 0) {
 					lotteryFrame.resetLottery();
 					consumer = buyFrame.getConsumer();
 					lotteryFrame.setConsumer(consumer);
 					lotteryFrame.repaintLotteryFrame();
+					buyBtn.setEnabled(false);
 					lotteryCount++;
 				}
 				lotteryFrame.setVisible(true);
@@ -155,18 +157,24 @@ public class MainFrame extends JFrame implements ActionListener {
 			historyFrame.setVisible(true);
 
 		} else if (click == nextBtn) {
-//			ToDo : 당첨확인 버튼을 누르면 당첨확인 창으로 이동
-			if (historyCount == 0) {
-				historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
-				historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
-				historyFrame.repaintHistoryFrame();
+//			ToDo : 다음 회차 버튼을 누르면 다음 회차 
+			if (lotteryFrame.getLottoList().size() == 6 && lotteryFrame.getBonusNumber() != 0) {
+				if (historyCount == 0) {
+					historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
+					historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
+					historyFrame.repaintHistoryFrame();
+				}
+				buyFrame.allInit();
+				buyBtn.setEnabled(true);
+				buyFrame.setConsumer(new Consumer());
+				historyCount = 0;
+				lotteryCount = 0;
+				lotteryFrame.resetLottery();
+				countLotto.setText(historyFrame.getLottoList().size() + "회차");
+			} else {
+				JOptionPane.showMessageDialog(wrapPnl, "아직 이번 회차 추첨이 진행되지 않았습니다.");
 			}
-			buyFrame.allInit();
-			buyFrame.setConsumer(new Consumer());
-			historyCount = 0;
-			lotteryCount = 0;
-			lotteryFrame.resetLottery();
-			countLotto.setText(historyFrame.getLottoList().size() + "회차");
+		
 
 		}
 	}
