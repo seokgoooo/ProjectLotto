@@ -433,11 +433,13 @@ public class BuyFrame extends JFrame implements ActionListener {
 		ActionListener pasteListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				for (int i = 0; i < lottoList.size(); i++) {
 					changeBtn[i].setEnabled(true);
 					deleteBtn[i].setEnabled(true);
 					copyBtn[i].setEnabled(true);
 				}
+
 				for (int i = 0; i < pasteBtn.length; i++) {
 
 					if (e.getSource() == pasteBtn[i]) {
@@ -452,6 +454,12 @@ public class BuyFrame extends JFrame implements ActionListener {
 						deleteBtn[lottoList.size() - 1].setEnabled(true);
 						copyBtn[lottoList.size() - 1].setEnabled(true);
 						copyBtnReset();
+						if(lottoList.size() == 5) {
+							for(int j = 0;j < copyBtn.length;j++) {
+								copyBtn[j].setEnabled(false);
+							}
+						}
+
 					}
 				}
 				ballAllSelected();
@@ -512,14 +520,14 @@ public class BuyFrame extends JFrame implements ActionListener {
 							rightLbl[index][j + 1]
 									.setIcon(new ImageIcon(getColorNumber(lottoList.get(index).get(j) - 1))); // new
 						}
-						
+
 						numberBoxAllBlack(); // new
 						semiAutoRBtn.setEnabled(true);
 						autoRBtn.setEnabled(true);
 						purchaseCombo.setEnabled(true);
 						rightResetBtn.setEnabled(true);
 						rightBuyBtn.setEnabled(true);
-						
+
 						for (int i = 0; i < lottoList.size(); i++) {
 							changeBtn[i].setEnabled(true);
 							deleteBtn[i].setEnabled(true);
@@ -605,7 +613,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 						rightBottomTextLbl.setText(
 								"결제금액: " + consumer.getPrice() + "원(현재: " + (consumer.getPrice() / 1000) + "장)");
 						purchaseCombo.setSelectedIndex(0);
-						if(yes) {
+						if (yes) {
 							numberBoxAllBlack();
 						}
 					}
