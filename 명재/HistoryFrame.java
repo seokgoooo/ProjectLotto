@@ -213,19 +213,6 @@ public class HistoryFrame extends JFrame {
 				}
 
 				if (currentIndex == 4) {
-					cardPnls = Arrays.copyOf(cardPnls, cardPnls.length + 1);
-					basicBallPnl = Arrays.copyOf(basicBallPnl, basicBallPnl.length + 1);
-					basicBall = Arrays.copyOf(basicBall, basicBall.length + 1);
-					textLbl = Arrays.copyOf(textLbl, textLbl.length + 1);
-					plusLbl = Arrays.copyOf(plusLbl, plusLbl.length + 1);
-					bonusBall = Arrays.copyOf(bonusBall, bonusBall.length + 1);
-
-					cardPnls[index - 1] = new JPanel();
-					BoxLayout box = new BoxLayout(cardPnls[index - 1], BoxLayout.Y_AXIS);
-					cardPnls[index - 1].setLayout(box);
-					cardPnls[index - 1].setBounds(12, 72, 470, 490);
-					subPnl.add(cardPnls[index - 1], String.valueOf((int) ('A' + (index - 1))));
-					System.out.println(basicBallPnl[index - 1][0]);
 					currentIndex = 0;
 				} else {
 					currentIndex++;
