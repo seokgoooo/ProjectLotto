@@ -207,12 +207,16 @@ public class BuyFrame extends JFrame implements ActionListener {
 		purchaseCombo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) {
-					JOptionPane.showMessageDialog(leftPnl, "한번에 5장 까지만 구매 가능합니다.");
-					purchaseCombo.setSelectedIndex(0);
+				if (lottoList.size() == 5) {
+
 				} else {
-					int p = (purchaseCombo.getSelectedIndex() + 1) * 1000;
-					leftPriceLbl.setText("선택금액 : " + p + "원");
+					if (lottoList.size() + purchaseCombo.getSelectedIndex() + 1 > 5) {
+						JOptionPane.showMessageDialog(leftPnl, "한번에 5장 까지만 구매 가능합니다.");
+						purchaseCombo.setSelectedIndex(0);
+					} else {
+						int p = (purchaseCombo.getSelectedIndex() + 1) * 1000;
+						leftPriceLbl.setText("선택금액 : " + p + "원");
+					}
 				}
 			}
 		});
@@ -454,8 +458,8 @@ public class BuyFrame extends JFrame implements ActionListener {
 						deleteBtn[lottoList.size() - 1].setEnabled(true);
 						copyBtn[lottoList.size() - 1].setEnabled(true);
 						copyBtnReset();
-						if(lottoList.size() == 5) {
-							for(int j = 0;j < copyBtn.length;j++) {
+						if (lottoList.size() == 5) {
+							for (int j = 0; j < copyBtn.length; j++) {
 								copyBtn[j].setEnabled(false);
 							}
 						}
