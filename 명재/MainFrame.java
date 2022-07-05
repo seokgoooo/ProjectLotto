@@ -14,7 +14,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton buyBtn;
 	private JButton lotteryBtn;
 	private JButton historyBtn;
-	private JButton checkBtn;
+	private JButton nextBtn;
 	private BuyFrame buyFrame;
 	private LotteryFrame lotteryFrame;
 	private HistoryFrame historyFrame;
@@ -49,6 +49,10 @@ public class MainFrame extends JFrame implements ActionListener {
 //		mainTitleText.setHorizontalAlignment(JLabel.CENTER); // JLabel 가운데 정렬
 		titlePnl.add(titleTxt);
 		//
+		JLabel countLotto = new JLabel(String.valueOf(historyFrame.getLottoList().size()) + "회차");
+		countLotto.setBounds(800, 16, 424, 34);
+		countLotto.setFont(new Font("HY헤드라인M", Font.BOLD, 30));
+		titlePnl.add(countLotto);
 
 		// 메인 화면 이미지 GUI 구현
 		JPanel imgPnl = new JPanel();
@@ -94,18 +98,18 @@ public class MainFrame extends JFrame implements ActionListener {
 		historyBtn.setIcon(new ImageIcon(historyUrl));
 		wrapPnl.add(historyBtn);
 
-		// 메인 화면 당첨확인 버튼 구현
-		checkBtn = new JButton();
-		checkBtn.setBounds(750, 416, 245, 155);
+		// 메인 화면 다음 회차 버튼 구현
+		nextBtn = new JButton();
+		nextBtn.setBounds(750, 416, 245, 155);
 		URL checkUrl = MainFrame.class.getClassLoader().getResource("resources/mainButton_04.png");
-		checkBtn.setIcon(new ImageIcon(checkUrl));
-		checkBtn.setEnabled(false);
-		wrapPnl.add(checkBtn);
+		nextBtn.setIcon(new ImageIcon(checkUrl));
+		nextBtn.setEnabled(true);
+		wrapPnl.add(nextBtn);
 
 		buyBtn.addActionListener(this);
 		lotteryBtn.addActionListener(this);
 		historyBtn.addActionListener(this);
-		checkBtn.addActionListener(this);
+		nextBtn.addActionListener(this);
 	}
 
 	// 버튼 클릭할 때 마다 동작하는 메소드 구현
@@ -126,15 +130,22 @@ public class MainFrame extends JFrame implements ActionListener {
 			lotteryFrame.setVisible(true);
 		} else if (click == historyBtn) {
 //			ToDo : 역대당첨번호 버튼을 누르면 역대당첨번호 창으로 이동
-			historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
-			historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
-			System.out.println(lotteryFrame.getLottoList());
-			System.out.println(historyFrame.getLottoList());
+			if(lotteryFrame.getLottoList().size() != 0) {
+				historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
+				historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
+			}
+//			historyFrame.historyFrameInit();
+			historyFrame.repaintHistoryFrame();
+			historyFrame.repaint();
+//			System.out.println(lotteryFrame.getLottoList());
+//			System.out.println(historyFrame.getLottoList());
 			historyFrame.setVisible(true);
 
-		} else if (click == checkBtn) {
+		} else if (click == nextBtn) {
 //			ToDo : 당첨확인 버튼을 누르면 당첨확인 창으로 이동
-
+			buyFrame.allInit();
+			buyFrame.setConsumer(new Consumer());
+			
 		}
 	}
 
