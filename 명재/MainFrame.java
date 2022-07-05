@@ -19,12 +19,15 @@ public class MainFrame extends JFrame implements ActionListener {
 	private LotteryFrame lotteryFrame;
 	private HistoryFrame historyFrame;
 	private Consumer consumer = new Consumer();
+	private JLabel countLotto;
+	private int historyCount = 0;
+	private int lotteryCount = 0;
 
 	public MainFrame() {
 		super("로또 추첨");
 		buyFrame = new BuyFrame();
 		lotteryFrame = new LotteryFrame();
-		historyFrame = new HistoryFrame();
+		historyFrame = new HistoryFrame(); // 다음 카드 패널을 추가 할때 에러
 
 		setSize(1000, 600);
 		setResizable(false);
@@ -48,8 +51,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		titleTxt.setFont(new Font("HY헤드라인M", Font.BOLD, 30));
 //		mainTitleText.setHorizontalAlignment(JLabel.CENTER); // JLabel 가운데 정렬
 		titlePnl.add(titleTxt);
-		//
-		JLabel countLotto = new JLabel(String.valueOf(historyFrame.getLottoList().size()) + "회차");
+
+		countLotto = new JLabel(String.valueOf(historyFrame.getLottoList().size()) + "회차");
 		countLotto.setBounds(800, 16, 424, 34);
 		countLotto.setFont(new Font("HY헤드라인M", Font.BOLD, 30));
 		titlePnl.add(countLotto);
@@ -124,28 +127,31 @@ public class MainFrame extends JFrame implements ActionListener {
 
 		} else if (click == lotteryBtn) {
 //			ToDo : 번호추첨 버튼을 누르면 번호추첨 창으로 이동
-			consumer = buyFrame.getConsumer();
-//			lotteryFrame.setConsumer(consumer);
-			lotteryFrame = new LotteryFrame(consumer);
+			if (lotteryCount == 0) {
+				consumer = buyFrame.getConsumer();
+				lotteryFrame.setConsumer(consumer);
+				lotteryFrame.repaintLotteryFrame();
+				lotteryCount++;
+			}
 			lotteryFrame.setVisible(true);
 		} else if (click == historyBtn) {
 //			ToDo : 역대당첨번호 버튼을 누르면 역대당첨번호 창으로 이동
-			if(lotteryFrame.getLottoList().size() != 0) {
+			if (historyCount == 0) {
 				historyFrame.setCurrentLotto(lotteryFrame.getLottoList());
 				historyFrame.setCurrentBonus(lotteryFrame.getBonusNumber());
+				historyFrame.repaintHistoryFrame();
+				historyCount++;
 			}
-//			historyFrame.historyFrameInit();
-			historyFrame.repaintHistoryFrame();
-			historyFrame.repaint();
-//			System.out.println(lotteryFrame.getLottoList());
-//			System.out.println(historyFrame.getLottoList());
 			historyFrame.setVisible(true);
 
 		} else if (click == nextBtn) {
 //			ToDo : 당첨확인 버튼을 누르면 당첨확인 창으로 이동
 			buyFrame.allInit();
 			buyFrame.setConsumer(new Consumer());
-			
+			historyCount = 0;
+			lotteryCount = 0;
+			countLotto.setText(historyFrame.getLottoList().size() + "회차");
+
 		}
 	}
 

@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -193,44 +194,70 @@ public class HistoryFrame extends JFrame {
 
 			card.show(subPnl, "A");
 			paintCount++;
-		} else {
+		} else {			
+			if (currentLotto.size() == 0) {
 
-			for (int j = 0; j < 6; j++) {
-				basicBall[index - 1][currentIndex][j].setIcon(new ImageIcon(getColorNumber(currentLotto.get(j))));
-			}
-
-			bonusBall[index - 1][currentIndex].setIcon(new ImageIcon(getColorNumber(this.currentBonus)));
-
-			if (currentIndex == 4) {
-				currentIndex = 0;
 			} else {
-				currentIndex++;
+				if (lottoList.size() % 5 == 1) {
+					for (int j = 0; j < 6; j++) {
+						basicBall[index - 2][currentIndex][j]
+								.setIcon(new ImageIcon(getColorNumber(currentLotto.get(j))));
+					}
+
+					bonusBall[index - 2][currentIndex].setIcon(new ImageIcon(getColorNumber(this.currentBonus)));
+				} else {
+					for (int j = 0; j < 6; j++) {
+						basicBall[index - 1][currentIndex][j]
+								.setIcon(new ImageIcon(getColorNumber(currentLotto.get(j))));
+					}
+
+					bonusBall[index - 1][currentIndex].setIcon(new ImageIcon(getColorNumber(this.currentBonus)));
+				}
+
+				if (currentIndex == 4) {
+					cardPnls = Arrays.copyOf(cardPnls, cardPnls.length + 1);
+					basicBallPnl = Arrays.copyOf(basicBallPnl, basicBallPnl.length + 1);
+					basicBall = Arrays.copyOf(basicBall, basicBall.length + 1);
+					textLbl = Arrays.copyOf(textLbl, textLbl.length + 1);
+					plusLbl = Arrays.copyOf(plusLbl, plusLbl.length + 1);
+					bonusBall = Arrays.copyOf(bonusBall, bonusBall.length + 1);
+
+					cardPnls[index - 1] = new JPanel();
+					BoxLayout box = new BoxLayout(cardPnls[index - 1], BoxLayout.Y_AXIS);
+					cardPnls[index - 1].setLayout(box);
+					cardPnls[index - 1].setBounds(12, 72, 470, 490);
+					subPnl.add(cardPnls[index - 1], String.valueOf((int) ('A' + (index - 1))));
+
+					currentIndex = 0;
+				} else {
+					currentIndex++;
+				}
+				
+				System.out.println(currentIndex);
+				
+				basicBallPnl[index - 1][currentIndex] = new JPanel();
+				textLbl[index - 1][currentIndex] = new JLabel("제 " + String.format("%02d", lottoList.size()) + "회 ");
+				textLbl[index - 1][currentIndex].setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 13));
+				basicBallPnl[index - 1][currentIndex].add(textLbl[index - 1][currentIndex]);
+
+				for (int j = 0; j < 6; j++) {
+					basicBall[index - 1][currentIndex][j] = new JCheckBox();
+					basicBall[index - 1][currentIndex][j].setIcon(defaultBall);
+					basicBallPnl[index - 1][currentIndex].add(basicBall[index - 1][currentIndex][j]);
+				}
+
+				plusLbl[index - 1][currentIndex] = new JLabel("+");
+				plusLbl[index - 1][currentIndex].setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 17));
+				basicBallPnl[index - 1][currentIndex].add(plusLbl[index - 1][currentIndex]);
+
+				bonusBall[index - 1][currentIndex] = new JCheckBox();
+
+				bonusBall[index - 1][currentIndex].setIcon(defaultBall);
+
+				basicBallPnl[index - 1][currentIndex].add(bonusBall[index - 1][currentIndex]);
+				cardPnls[index - 1].add(basicBallPnl[index - 1][currentIndex]);
 			}
-
-			basicBallPnl[index - 1][currentIndex] = new JPanel();
-			textLbl[index - 1][currentIndex] = new JLabel("제 " + String.format("%02d", lottoList.size()) + "회 ");
-			textLbl[index - 1][currentIndex].setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 13));
-			basicBallPnl[index - 1][currentIndex].add(textLbl[index - 1][currentIndex]);
-
-			for (int j = 0; j < 6; j++) {
-				basicBall[index - 1][currentIndex][j] = new JCheckBox();
-				basicBall[index - 1][currentIndex][j].setIcon(defaultBall);
-				basicBallPnl[index - 1][currentIndex].add(basicBall[index - 1][currentIndex][j]);
-			}
-			
-			plusLbl[index - 1][currentIndex] = new JLabel("+");
-			plusLbl[index - 1][currentIndex].setFont(new Font("휴먼둥근헤드라인", Font.PLAIN, 17));
-			basicBallPnl[index - 1][currentIndex].add(plusLbl[index - 1][currentIndex]);
-			
-			bonusBall[index - 1][currentIndex] = new JCheckBox();
-		 
-			bonusBall[index - 1][currentIndex].setIcon(defaultBall);
-
-			basicBallPnl[index - 1][currentIndex].add(bonusBall[index - 1][currentIndex]);
-			cardPnls[index - 1].add(basicBallPnl[index - 1][currentIndex]);
-
 		}
-
 	}
 
 	public List<Integer> lotto() {
