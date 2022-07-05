@@ -34,6 +34,26 @@ public class LotteryFrame extends JFrame {
 	private Random random = new Random();
 	private boolean raffleEnd = false;
 	private List<List<Integer>> purchaseList = new ArrayList<>();
+	private JPanel fullPnl;
+	private JPanel subPnl;
+	private CardLayout card;
+	private BoxLayout cardBox;
+	private JPanel[] cardPnls;
+	private JPanel[] cardInPnls;
+	private JPanel pnlRball;
+	private int index;
+	private URL bigImgUrl;
+	private int paintCount = 0;
+	private JCheckBox bonus;
+	private JButton confirmClick;
+
+	public Integer getBonusNumber() {
+		return bonusNumber;
+	}
+
+	public void setBonusNumber(Integer bonusNumber) {
+		this.bonusNumber = bonusNumber;
+	}
 
 	public Consumer getConsumer() {
 		return consumer;
@@ -43,26 +63,26 @@ public class LotteryFrame extends JFrame {
 		this.consumer = consumer;
 	}
 
+	public List<Integer> getLottoList() {
+		return lottoList;
+	}
+
+	public void setLottoList(List<Integer> lottoList) {
+		this.lottoList = lottoList;
+	}
+
 	public LotteryFrame() {
 		super("번호추첨");
 
-		CardLayout card = new CardLayout();
-		JPanel fullPnl = new JPanel();
-		JPanel subPnl = new JPanel(card);
+		card = new CardLayout();
+		fullPnl = new JPanel();
+		subPnl = new JPanel(card);
+
+		repaintLotteryFrame();
 
 		for (int i = 0; i < 45; i++) {
 			listFortyFive.add(i + 1);
 		}
-
-		for (int i = 0; i < 16; i++) {
-			purchaseList.add(lotto());
-		}
-
-		int index = (int) Math.ceil(purchaseList.size() / 5.0);
-
-		Rball = new JCheckBox[index][5][6];
-		lblA = new JLabel[index][5];
-		lblWin = new JLabel[index][5];
 
 		JPanel mainPnl = new JPanel();
 		mainPnl.setBounds(0, 59, 994, 512);
@@ -78,9 +98,9 @@ public class LotteryFrame extends JFrame {
 		mainPnl.add(pnlBonus);
 		pnlBonus.setLayout(null);
 
-		JCheckBox bonus = new JCheckBox(); // 보너스 공
+		bonus = new JCheckBox();
 		bonus.setBounds(127, 0, 120, 110);
-		URL bigImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryDefault.png");
+		bigImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryDefault.png");
 		bonus.setIcon(new ImageIcon(bigImgUrl));
 		pnlBonus.add(bonus);
 
@@ -99,11 +119,6 @@ public class LotteryFrame extends JFrame {
 //-------------------------------------------------------------------------------------------------------- 오른쪽 부분		
 		fullPnl.setBounds(509, 120, 455, 350);
 		mainPnl.add(fullPnl);
-
-		// 오른쪽 큰 패널 안에 가로 작은패널
-		JPanel pnlRball = new JPanel();
-		pnlRball.setBounds(0, 0, 453, 70);
-		pnlRball.setLayout(null);
 // ----------------------------------------------------------------------------------------------------- 큰공 6개 넣는거
 		ball = new JCheckBox[6]; // 추첨 공 6개
 		for (int i = 0; i < ball.length; i++) {
@@ -113,7 +128,7 @@ public class LotteryFrame extends JFrame {
 		}
 // ----------------------------------------------------------------------------------------------------- 
 		// 번호 추첨
-		JButton confirmClick = new JButton();
+		confirmClick = new JButton();
 		JButton btnClick = new JButton();
 
 		btnClick.setBounds(163, 465, 210, 35);
@@ -153,8 +168,6 @@ public class LotteryFrame extends JFrame {
 						confirmClick.setVisible(true);
 						raffleEnd = true;
 					} else {
-
-//					ball[lottoList.size()].setText(String.valueOf(listFortyFive.get(number)));
 						ball[lottoList.size()].setIcon(new ImageIcon(getBigColorNumber(listFortyFive.get(number))));
 						lottoList.add(listFortyFive.get(number));
 						listFortyFive.remove(listFortyFive.get(number));
@@ -163,9 +176,7 @@ public class LotteryFrame extends JFrame {
 			}
 		});
 		btnClick.setBorderPainted(false);
-//-----------------------------------------------------------------------------------------------
-		JPanel[] cardPnl = new JPanel[index];
-		JPanel[] cardInPnl = new JPanel[5];
+
 		JPanel pnlEast = new JPanel();
 
 		JButton btnPrev = new JButton("이전");
@@ -194,39 +205,6 @@ public class LotteryFrame extends JFrame {
 		fullPnl.add(subPnl);
 		fullPnl.add(pnlEast, "East");
 
-		int same = 0;
-		for (int i = 0; i < cardPnl.length; i++) {
-			cardPnl[i] = new JPanel();
-			BoxLayout cardBox = new BoxLayout(cardPnl[i], BoxLayout.Y_AXIS);
-			cardPnl[i].setLayout(cardBox);
-			char c = (char) ('A' + i);
-
-			subPnl.add(cardPnl[i], String.valueOf(c));
-
-			for (int j = 0; j < 5; j++) {
-				if (same == purchaseList.size()) {
-					break;
-				}
-				cardInPnl[j] = new JPanel();
-				char alpa = (char) ('A' + j);
-				lblA[i][j] = new JLabel(String.valueOf(alpa) + "    ");
-				lblWin[i][j] = new JLabel("확인    ");
-
-				cardInPnl[j].add(lblA[i][j]);
-				cardInPnl[j].add(lblWin[i][j]);
-
-				for (int k = 0; k < 6; k++) {
-					Rball[i][j][k] = new JCheckBox();
-					cardInPnl[j].add(Rball[i][j][k]);
-					Rball[i][j][k].setIcon(new ImageIcon(getBlackNumber(purchaseList.get(same).get(k))));
-				}
-				cardPnl[i].add(cardInPnl[j]);
-				same++;
-			}
-
-		}
-
-		card.show(subPnl, "A");
 //-----------------------------------------------------------------------------------------------추첨 확인쪽 공 만들기
 
 		URL me1ImgUrl = LotteryFrame.class.getClassLoader().getResource("lotteryBtn_04.png");
@@ -253,10 +231,9 @@ public class LotteryFrame extends JFrame {
 				confirmClick.setIcon(new ImageIcon(me2ImgUrl));
 			}
 
-			int same = 0;
-
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				int same = 0;
 				confirmClick.setIcon(new ImageIcon(me1ImgUrl));
 				for (int i = 0; i < index; i++) {
 					for (int j = 0; j < 5; j++) {
@@ -311,6 +288,12 @@ public class LotteryFrame extends JFrame {
 							break;
 						default:
 							lblWin[i][j].setText("탈락    ");
+							for (int k = 0; k < 6; k++) {
+								if (lottoList.contains(purchaseList.get(same).get(k))) {
+									Rball[i][j][k]
+											.setIcon(new ImageIcon(getColorNumber(purchaseList.get(same).get(k))));
+								}
+							}
 							same++;
 							break;
 						}
@@ -360,6 +343,71 @@ public class LotteryFrame extends JFrame {
 		setLocationRelativeTo(null);
 		setLayout(null);
 
+	}
+
+	public void resetLottery() {
+
+		lottoList.removeAll(lottoList);
+		purchaseList.removeAll(purchaseList);
+		subPnl.removeAll();
+		confirmClick.setVisible(false);
+		for (int i = 0; i < ball.length; i++) {
+			ball[i].setIcon(new ImageIcon(bigImgUrl));
+		}
+		bonus.setIcon(new ImageIcon(bigImgUrl));
+		raffleEnd = false;
+	}
+
+	public void repaintLotteryFrame() {
+
+		for (int i = 0; i < consumer.getLottoList().size(); i++) {
+			purchaseList.add(consumer.getLottoList().get(i));
+		}
+
+		index = (int) Math.ceil(purchaseList.size() / 5.0);
+
+		Rball = new JCheckBox[index][5][6];
+		lblA = new JLabel[index][5];
+		lblWin = new JLabel[index][5];
+
+		cardPnls = new JPanel[index];
+		cardInPnls = new JPanel[5];
+
+		int same = 0;
+		for (int i = 0; i < cardPnls.length; i++) {
+			cardPnls[i] = new JPanel();
+			cardBox = new BoxLayout(cardPnls[i], BoxLayout.Y_AXIS);
+			cardPnls[i].setLayout(cardBox);
+			char c = (char) ('A' + i);
+
+			subPnl.add(cardPnls[i], String.valueOf(c));
+
+			for (int j = 0; j < 5; j++) {
+				if (same == purchaseList.size()) {
+					break;
+				}
+				cardInPnls[j] = new JPanel();
+				char alpa = (char) ('A' + j);
+				lblA[i][j] = new JLabel(String.valueOf(alpa) + "    ");
+				lblWin[i][j] = new JLabel("확인    ");
+
+				cardInPnls[j].add(lblA[i][j]);
+				cardInPnls[j].add(lblWin[i][j]);
+
+				for (int k = 0; k < 6; k++) {
+					Rball[i][j][k] = new JCheckBox();
+					cardInPnls[j].add(Rball[i][j][k]);
+					Rball[i][j][k].setIcon(new ImageIcon(getBlackNumber(purchaseList.get(same).get(k))));
+				}
+				cardPnls[i].add(cardInPnls[j]);
+				same++;
+			}
+
+			JLabel page = new JLabel(i + 1 + "  페이지");
+			cardPnls[i].add(page);
+		}
+
+		card.show(subPnl, "A");
 	}
 
 	public URL getBigColorNumber(int i) {
