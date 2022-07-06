@@ -385,7 +385,10 @@ public class BuyFrame extends JFrame implements ActionListener {
 				lottoList.removeAll(lottoList);
 				pasteBtnFalse();
 				copyBtnReset();
+//				numberBoxAllBlack();
+				ballAllSelected();
 				leftCheckBtn.setEnabled(true);
+				
 			}
 		});
 
