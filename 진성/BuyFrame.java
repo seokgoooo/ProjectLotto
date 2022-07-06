@@ -490,7 +490,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 				}
 				consumer.setLottoList(lottoList);
 				lottoList.removeAll(lottoList);
-				leftCheckBtn.setEnabled(true);
+				//leftCheckBtn.setEnabled(true); // ?
 //				----------------------------------------------------------------------------------
 //				countLbl.setText("총 구매 횟수: " + consumer.getCount() + "회");
 //				----------------------------------------------------------------------------------
@@ -502,6 +502,7 @@ public class BuyFrame extends JFrame implements ActionListener {
 				lottoList.removeAll(lottoList);
 				pasteBtnFalse();
 				copyBtnReset();
+				leftCheckBtn.setEnabled(true);
 			}
 		});
 
