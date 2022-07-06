@@ -161,7 +161,7 @@ public class LotteryFrame extends JFrame {
 					btnClick.setIcon(new ImageIcon(winImgUrl));
 					int number = random.nextInt(listFortyFive.size());
 					if (lottoList.size() == 6) {
-						bonusNumber = number;
+						bonusNumber = listFortyFive.get(number);
 						bonus.setIcon(new ImageIcon(getBigColorNumber(listFortyFive.get(number))));
 						purchaseList.remove(0);
 						purchaseList.add(0, lottoList);
