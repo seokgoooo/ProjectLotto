@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry excluding="lotto/src/|명재/" kind="src" path=""/>
+	<classpathentry excluding="명재/" kind="src" path=""/>
 	<classpathentry kind="src" path="명재"/>
-	<classpathentry kind="src" path="lotto/src"/>
 	<classpathentry kind="output" path="lotto/bin"/>
 </classpath>
